@@ -1,0 +1,12 @@
+HgII phyto (mg/Kg) MMHg phyto (mg/Kg)
+0.000000	0.000000
+HgII Amphipode (mg/Kg) MMHg Amphipode (mg/Kg)
+0.000000	0.000000
+HgII Mullus (mg/Kg) MMHg Mullus (mg/Kg)
+0.000000	0.000000
+HgII phyto (mg/Kg) MMHg phyto (mg/Kg)
+0.001394	0.000300
+HgII Amphipode (mg/Kg) MMHg Amphipode (mg/Kg)
+0.311185	0.023218
+HgII Mullus (mg/Kg) MMHg Mullus (mg/Kg)
+0.035254	0.758883
