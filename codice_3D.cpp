@@ -13,21 +13,27 @@
 
 #define Dxx 3600.0 // m^2/h
 #define Dyy 3600.0 // m^2/h
-#define Dzz 3.6 // m^2/h
+#define Dzz 1.2 // m^2/h
 #define vz0 0.0 // m/h
-#define kDSPM0 pow(10.0,5.025) // l/Kg
-#define kD0 pow(10.0,5.025) //210000 // l/Kg
+#define kDSPM0 pow(10.0,4.7) // l/Kg
+#define kD0 pow(10.0,4.7) //210000 // l/Kg
+#define kDIIsilt 3000 // l/Kg
+#define kDMMsilt 1000 // l/Kg
 #define	kDIIsed pow(10.0,5.0) //l/Kg
 #define	kDMMsed pow(10.0,2.5) //l/Kg
+#define SDsed 2.6 // g/cm3
+#define vset 0.208 // m/h
 #define VFCII 27500 // l/Kg
 #define VFCMM 800000 // l/Kg
 #define kPhde 0.00216 // 1/h
-#define kmeth 0.000126  //0.00138 // 1/h
+#define kmeth 0.000272 //0.000126  //0.00138 // 1/h
+#define kdemeth 0.014940 // 1/h
 #define k1phox 0.0000066 // m^2/W*s
 #define k2phre 0.0000016 // m^2/W*s
 #define k3bio 140.0 // m^3/mol
 #define k4bio 86.0 // m^3/mol
 #define det 24.0 // h
+#define depmed 0.0000013356 // m/h
 #define H1 0.479 // dimensionless
 #define uwind 3.83 // m/s 
 #define PMCO2 44.01 // g/mol
@@ -39,7 +45,7 @@
 #define As 1.0 // m^2
 #define SLII 0.0 // ng/(l * h)
 #define lambda1 0.52 //0.99 // dimensionless
-#define chlas 0.205 // mg/m^3  
+//#define chlas 0.205 // mg/m^3  
 #define Dwin 0.000002534 // m^2/h
 #define Dwor 0.000002534 // m^2/h
 #define delsed 0.00009 // m
@@ -71,7 +77,7 @@
 #define Llev 400.0 // m
 #define SLMM 0.0 // ng/(l * h)
 #define MMHgatm 0.0 // ng/m^3
-#define Drydep 0.0 // mg/(m^-2 * h)  
+#define DrydepHgII 0.000456 // microg/(m^-2 * h)  
 #define ws 0.174  // m/h
 #define Td 1814400.0 // Kg/(m*h^2)
 #define Tr 4147200.0 // Kg/(m*h^2)
@@ -82,8 +88,8 @@
 #define g 9.80665 // m/sec^2
 #define ks 36.0 // m^(1/3)/s
 #define romw 1025.0 // Kg/m^3
-#define Vpce1 4188.787 // microm^3/cell
-#define Wp1 0.004188787 // microg
+#define Vpce1 14.00 // microm^3/cell
+#define Wp1 0.000014 // microg
 #define ag 0.22 // dimensionless
 #define bg 0.15 // dimensionless
 #define kp 0.25 // dimensionless
@@ -142,7 +148,7 @@
 #define chla2 0.041  // mg/m^3
 #define tempo 8760 // h
 #define M 105120 // 1/12 h
-#define N 25 // years (modificato Ale)
+#define N 250 // years
 #define I 10  // nodes along x axis
 #define J 18  // nodes along y axis
 #define K 6   // vertical layers number in seawater
@@ -172,7 +178,7 @@
 #define B1 600000000.0 // cell/m^3
 #define B1ext 600000000.0 // cell/m^3
 #define dlHg  1.9 // ng/l  (detection limit for DHg and THg)
-#define NPP 0.020417 // g C/m^2 * h
+//#define NPP 0.020417 // g C/m^2 * h
 
 
 
@@ -241,6 +247,14 @@ int main(int argc, char *argv[])
     double fluHgIIzsed, fluMMHgzsed, fluHgIIzsedext1, fluHgIIzsedext2, fluHgIIzsedext3, fluMMHgzsedext1, fluMMHgzsedext2, fluMMHgzsedext3;
     double fluHgIIzbur, fluHgIIzburext1, fluHgIIzburext2, fluHgIIzburext3;
     double fluMMHgzbur, fluMMHgzburext1, fluMMHgzburext2, fluMMHgzburext3;
+    double fluHgIIzbur2, fluHgIIzburext12, fluHgIIzburext22, fluHgIIzburext32;
+    double fluMMHgzbur2, fluMMHgzburext12, fluMMHgzburext22, fluMMHgzburext32;
+    double fluHgIIzbur3, fluHgIIzburext13, fluHgIIzburext23, fluHgIIzburext33;
+    double fluMMHgzbur3, fluMMHgzburext13, fluMMHgzburext23, fluMMHgzburext33;
+    double fluHgIIzbur4, fluHgIIzburext14, fluHgIIzburext24, fluHgIIzburext34;
+    double fluMMHgzbur4, fluMMHgzburext14, fluMMHgzburext24, fluMMHgzburext34;
+    double fluHgIIzbur5, fluHgIIzburext15, fluHgIIzburext25, fluHgIIzburext35;
+    double fluMMHgzbur5, fluMMHgzburext15, fluMMHgzburext25, fluMMHgzburext35;
     double fluxHg0zatm, fluxHg0zdep, fluxHgIIzdep, fluxMMHgzdep, fluxHg0zatmext1, fluxHg0zdepext1, fluxHgIIzdepext1, fluxMMHgzdepext1;
     double fluxHg0zatmext2, fluxHg0zdepext2, fluxHgIIzdepext2, fluxMMHgzdepext2, fluxHg0zatmext3, fluxHg0zdepext3, fluxHgIIzdepext3, fluxMMHgzdepext3;
     double fluxSPMzdep, fluxSPMzdepext1, fluxSPMzdepext2, fluxSPMzdepext3;
@@ -248,13 +262,21 @@ int main(int argc, char *argv[])
     double TotHgIIsed, TotMMHgsed, TotHgsed, TotSIISPM, TotSMMSPM, TotSIIDOM, TotSMMDOM;
     double TotHgIIbur, TotfluHgIIzbur, TotfluHgIIzburext1, TotfluHgIIzburext2, TotfluHgIIzburext3;
     double TotMMHgbur, TotfluMMHgzbur, TotfluMMHgzburext1, TotfluMMHgzburext2, TotfluMMHgzburext3;
+    double TotHgIIbur2, TotfluHgIIzbur2, TotfluHgIIzburext12, TotfluHgIIzburext22, TotfluHgIIzburext32;
+    double TotMMHgbur2, TotfluMMHgzbur2, TotfluMMHgzburext12, TotfluMMHgzburext22, TotfluMMHgzburext32;
+    double TotHgIIbur3, TotfluHgIIzbur3, TotfluHgIIzburext13, TotfluHgIIzburext23, TotfluHgIIzburext33;
+    double TotMMHgbur3, TotfluMMHgzbur3, TotfluMMHgzburext13, TotfluMMHgzburext23, TotfluMMHgzburext33;
+    double TotHgIIbur4, TotfluHgIIzbur4, TotfluHgIIzburext14, TotfluHgIIzburext24, TotfluHgIIzburext34;
+    double TotMMHgbur4, TotfluMMHgzbur4, TotfluMMHgzburext14, TotfluMMHgzburext24, TotfluMMHgzburext34;
+    double TotHgIIbur5, TotfluHgIIzbur5, TotfluHgIIzburext15, TotfluHgIIzburext25, TotfluHgIIzburext35;
+    double TotMMHgbur5, TotfluMMHgzbur5, TotfluMMHgzburext15, TotfluMMHgzburext25, TotfluMMHgzburext35;
     double TotfluHg0atm, TotfluHg0zatm, TotfluHg0zatmext1, TotfluHg0zatmext2, TotfluHg0zatmext3;
     double TotfluHg0dep, TotfluHg0zdep, TotfluHg0zdepext1, TotfluHg0zdepext2, TotfluHg0zdepext3;
     double TotfluHgIIdep, TotfluHgIIzdep, TotfluHgIIzdepext1, TotfluHgIIzdepext2, TotfluHgIIzdepext3;
     double TotfluSPMdep, TotfluSPMzdep, TotfluSPMzdepext1, TotfluSPMzdepext2, TotfluSPMzdepext3;
     double TotfluMMHgdep, TotfluMMHgzdep, TotfluMMHgzdepext1, TotfluMMHgzdepext2, TotfluMMHgzdepext3;
-    double TotfluHgdep, TotHgbur;
-    double peratio, Hggas, OCRR, k3, k4, dt;
+    double TotfluHgdep, TotHgbur, TotHgbur2, TotHgbur3, TotHgbur4, TotHgbur5;
+    double NPP[I+2][J+2][K+2], peratio[I+2][J+2][K+2], Hggas, OCRR[I+2][J+2][K+2], k3[I+2][J+2][K+2], k4[I+2][J+2][K+2], dt;
     
     char *tmp,buf[20],buf1[50]; 
 
@@ -1148,8 +1170,8 @@ int main(int argc, char *argv[])
            
            vz[i][j][k]=vz0;
            b1[i][j][k]=B1; // cell/m^3
-           forg[i][j][k]=SPOM[i][j][k]/SPM[i][j][k];
-           SPIM[i][j][k]=(1.0-forg[i][j][k])*SPM[i][j][k]; //  Kg/l
+           forg[i][j][k]=0.52*SPOM[i][j][k]/SPM[i][j][k];
+           SPIM[i][j][k]=SPM[i][j][k]-SPOM[i][j][k]; //  Kg/l
            chla1[i][j][k]=b1[i][j][k]*exp((((k-1)*dz)+33.72)/19.57)*pow(10.0,-12.0);  // mg/m^3
            chlatot[i][j][k]= chla1[i][j][k]+chla2;  // mg/m^3
            SIIDOM[i][j][k]=lambda1*m1*b1[i][j][k]*PHgII[i][j][k]; // microg/(m^3*h)
@@ -1176,19 +1198,19 @@ int main(int argc, char *argv[])
 				chlatot[i][j][k]=0.0;
 			}
            
-           
-           peratio=-0.0081*Tatm+0.0806*log(chlas)+0.426; //dimensionless
-           OCRR=(NPP/(12.011*75.0))*(1.0-peratio); // mol/m^3 *h
-           k3=k3bio*OCRR; // h
-           k4=k4bio*OCRR; //h
+           NPP[i][j][k]=pow(10.0,(2.09+0.81*log10(chlatot[i][j][k])))*(pow(10.0,-3.0)/24.0); // g/m^2*h
+           peratio[i][j][k]=-0.0081*Tatm+0.0806*log(chlatot[i][j][k])+0.426; //dimensionless
+           OCRR[i][j][k]=(NPP[i][j][k]/(12.011*75.0))*(1.0-peratio[i][j][k]); // mol/m^3 *h
+           k3[i][j][k]=k3bio*OCRR[i][j][k]; // h
+           k4[i][j][k]=k4bio*OCRR[i][j][k]; //h
            
            if(k==1){
-               SIISPM[i][j][k]=NPP*peratio*(kD0/forg[i][j][k])*pow(10,-6.0)*(HgII[i][j][k]/(dz/2.0));
-               SMMSPM[i][j][k]=NPP*peratio*(kD0/forg[i][j][k])*pow(10,-6.0)*(MMHg[i][j][k]/(dz/2.0));
+               SIISPM[i][j][k]=NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*(HgII[i][j][k]/dz)+vset*((kDIIsilt*SPIM[i][j][k]*HgII[i][j][k])/dz); //microg/m^3*h
+               SMMSPM[i][j][k]=NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*(MMHg[i][j][k]/dz)+vset*((kDMMsilt*SPIM[i][j][k]*MMHg[i][j][k])/dz); //microg/m^3*h
            }
            else{
-               SIISPM[i][j][k]=NPP*peratio*(kD0/forg[i][j][k])*pow(10,-6.0)*((HgII[i][j][k]-HgII[i][j][k-1])/dz);
-               SMMSPM[i][j][k]=NPP*peratio*(kD0/forg[i][j][k])*pow(10,-6.0)*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz);
+               SIISPM[i][j][k]=(NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*HgII[i][j][k]-NPP[i][j][k-1]*peratio[i][j][k-1]*(kD0/forg[i][j][k-1])*HgII[i][j][k-1])*(pow(10,-6.0)/dz)+vset*kDIIsilt*((SPIM[i][j][k]*HgII[i][j][k]-SPIM[i][j][k-1]*HgII[i][j][k-1])/dz); //microg/m^3*h
+               SMMSPM[i][j][k]=(NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*MMHg[i][j][k]-NPP[i][j][k-1]*peratio[i][j][k-1]*(kD0/forg[i][j][k-1])*MMHg[i][j][k-1])*(pow(10,-6.0)/dz)+vset*kDMMsilt*((SPIM[i][j][k]*MMHg[i][j][k]-SPIM[i][j][k-1]*MMHg[i][j][k-1])/dz); //microg/m^3*h
            }
                      
            if(k==1){
@@ -1460,7 +1482,7 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
                 vyc[i][j][5]=-3600.0*value5[p][2];
                 vxc[i][j][6]=3600.0*value5[p][1];
                 vyc[i][j][6]=-3600.0*value5[p][2];
-                dep[i][j]=ero[p][1];
+                dep[i][j]=depmed;
                 Totdepold[i][j]=ero2[p][1];
              }
          }       
@@ -1519,8 +1541,8 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            for(k=1; k<=K; k++){ // rispetto allo spazio y
        
            if(Rini[i][j][k]==Rbot){  
-               fluxHgIIsed[i][j] = MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*24.0-HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*24.0; // microg/m^2*d
-               fluxMMHgsed[i][j] = MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*24.0-MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*24.0; // microg/m^2*d    
+               fluxHgIIsed[i][j] = MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*24.0; // microg/m^2*d
+               fluxMMHgsed[i][j] = MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*24.0; // microg/m^2*d    
            } 
              
            }
@@ -1534,8 +1556,8 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            if(Rini[i][j][1]>=Rin){
                fluxHg0atm[i][j] = -1.0*MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1])*pow(10,3.0); // ng/m^2*h
                fluxHg0dep[i][j] = Hggas*(Pr/det); // ng/m^2*h
-               fluxHgIIdep[i][j] = HgIIatm*(Pr/det); // ng/m^2*h  
-               fluxMMHgdep[i][j] = MMHgatm*(Pr/det); // ng/m^2*h 
+               fluxHgIIdep[i][j] = HgIIatm*(Pr/det)+DrydepHgII*pow(10,3.0); // ng/m^2*h  
+               fluxMMHgdep[i][j] = 0.005025*(HgIIatm*(Pr/det)+DrydepHgII*pow(10,3.0)); //MMHgatm*(Pr/det); // ng/m^2*h 
            }
            else{
                fluxHg0atm[i][j] = 0.0; // ng/m^2*h
@@ -1570,18 +1592,50 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
     fluMMHgzsed=0.0;
     fluHgIIzbur=0.0;
     fluMMHgzbur=0.0;
+    fluHgIIzbur2=0.0;
+    fluMMHgzbur2=0.0;
+    fluHgIIzbur3=0.0;
+    fluMMHgzbur3=0.0;
+    fluHgIIzbur4=0.0;
+    fluMMHgzbur4=0.0;
+    fluHgIIzbur5=0.0;
+    fluMMHgzbur5=0.0;
     fluHgIIzsedext1=0.0;
     fluMMHgzsedext1=0.0;
     fluHgIIzburext1=0.0;
     fluMMHgzburext1=0.0;
+    fluHgIIzburext12=0.0;
+    fluMMHgzburext12=0.0;
+    fluHgIIzburext13=0.0;
+    fluMMHgzburext13=0.0;
+    fluHgIIzburext14=0.0;
+    fluMMHgzburext14=0.0;
+    fluHgIIzburext15=0.0;
+    fluMMHgzburext15=0.0;
     fluHgIIzsedext2=0.0;
     fluMMHgzsedext2=0.0;
     fluHgIIzburext2=0.0;
     fluMMHgzburext2=0.0;
+    fluHgIIzburext22=0.0;
+    fluMMHgzburext22=0.0;
+    fluHgIIzburext23=0.0;
+    fluMMHgzburext23=0.0;
+    fluHgIIzburext24=0.0;
+    fluMMHgzburext24=0.0;
+    fluHgIIzburext25=0.0;
+    fluMMHgzburext25=0.0;
     fluHgIIzsedext3=0.0;
     fluMMHgzsedext3=0.0;
     fluHgIIzburext3=0.0;
     fluMMHgzburext3=0.0;
+    fluHgIIzburext32=0.0;
+    fluMMHgzburext32=0.0;
+    fluHgIIzburext33=0.0;
+    fluMMHgzburext33=0.0;
+    fluHgIIzburext34=0.0;
+    fluMMHgzburext34=0.0;
+    fluHgIIzburext35=0.0;
+    fluMMHgzburext35=0.0;
     fluxHg0zatm=0.0;
     fluxHg0zdep=0.0;
     fluxHgIIzdep=0.0;
@@ -1607,18 +1661,50 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
    TotfluMMHgzsed = 0.0; 
    TotfluHgIIzbur = 0.0; 
    TotfluMMHgzbur = 0.0; 
+   TotfluHgIIzbur2 = 0.0; 
+   TotfluMMHgzbur2 = 0.0;
+   TotfluHgIIzbur3 = 0.0; 
+   TotfluMMHgzbur3 = 0.0;
+   TotfluHgIIzbur4 = 0.0; 
+   TotfluMMHgzbur4 = 0.0;
+   TotfluHgIIzbur5 = 0.0; 
+   TotfluMMHgzbur5 = 0.0;
    TotfluHgIIzsedext1 = 0.0; 
    TotfluMMHgzsedext1 = 0.0; 
    TotfluHgIIzburext1 = 0.0; 
    TotfluMMHgzburext1 = 0.0; 
+   TotfluHgIIzburext12 = 0.0; 
+   TotfluMMHgzburext12 = 0.0;
+   TotfluHgIIzburext13 = 0.0; 
+   TotfluMMHgzburext13 = 0.0;
+   TotfluHgIIzburext14 = 0.0; 
+   TotfluMMHgzburext14 = 0.0;
+   TotfluHgIIzburext15 = 0.0; 
+   TotfluMMHgzburext15 = 0.0;
    TotfluHgIIzsedext2 = 0.0; 
    TotfluMMHgzsedext2 = 0.0; 
    TotfluHgIIzburext2 = 0.0; 
-   TotfluMMHgzburext2 = 0.0; 
+   TotfluMMHgzburext2 = 0.0;
+   TotfluHgIIzburext22 = 0.0; 
+   TotfluMMHgzburext22 = 0.0;
+   TotfluHgIIzburext23 = 0.0; 
+   TotfluMMHgzburext23 = 0.0;
+   TotfluHgIIzburext24 = 0.0; 
+   TotfluMMHgzburext24 = 0.0;
+   TotfluHgIIzburext25 = 0.0; 
+   TotfluMMHgzburext25 = 0.0;
    TotfluHgIIzsedext3 = 0.0; 
    TotfluMMHgzsedext3 = 0.0; 
    TotfluHgIIzburext3 = 0.0; 
    TotfluMMHgzburext3 = 0.0; 
+   TotfluHgIIzburext32 = 0.0; 
+   TotfluMMHgzburext32 = 0.0;
+   TotfluHgIIzburext33 = 0.0; 
+   TotfluMMHgzburext33 = 0.0;
+   TotfluHgIIzburext34 = 0.0; 
+   TotfluMMHgzburext34 = 0.0;
+   TotfluHgIIzburext35 = 0.0; 
+   TotfluMMHgzburext35 = 0.0;
    
    TotfluHg0zatm = 0.0; 
    TotfluHg0zdep = 0.0; 
@@ -1674,7 +1760,7 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
                 vyc[i][j][5]=-3600.0*value5[p][2];
                 vxc[i][j][6]=3600.0*value5[p][1];
                 vyc[i][j][6]=-3600.0*value5[p][2];
-                dep[i][j]=(ero[p][1]-ero[p-181][1])/3.0; //m/h
+                dep[i][j]=depmed;//(ero[p][1]-ero[p-181][1])/3.0; //m/h
                      
                 }    
              }       
@@ -1765,9 +1851,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            if(Rini[i-1][j][k]>=Rin && Rini[i][j-1][k]>=Rin && Rini[i][j][k-1]>=Rin){
                                      
            b1[i][j][k]+= G1[i][j][k]*b1[i][j][k]*dt-1.0*dt*((flub1x[i][j][k]+1.0*Dxx*((b1[i][j][k]-b1[i-1][j][k])/dx))/dx)-1.0*dt*((flub1y[i][j][k]+1.0*Dyy*((b1[i][j][k]-b1[i][j-1][k])/dy))/dy)-1.0*dt*((flub1z[i][j][k]+1.0*Dzz*((b1[i][j][k]-b1[i][j][k-1])/dz))/dz); // cell/m^3
-           Hg0[i][j][k]+= (k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3)*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*((fluHg0x[i][j][k]+1.0*Dxx*((Hg0[i][j][k]-Hg0[i-1][j][k])/dx))/dx)-1.0*dt*((fluHg0y[i][j][k]+1.0*Dyy*((Hg0[i][j][k]-Hg0[i][j-1][k])/dy))/dy)-1.0*dt*((fluHg0z[i][j][k]+1.0*Dzz*((Hg0[i][j][k]-Hg0[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
-           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3)*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*kmeth*HgII[i][j][k]*dt-1.0*dt*((fluHgIIx[i][j][k]+1.0*Dxx*((HgII[i][j][k]-HgII[i-1][j][k])/dx))/dx)-1.0*dt*((fluHgIIy[i][j][k]+1.0*Dyy*((HgII[i][j][k]-HgII[i][j-1][k])/dy))/dy)-1.0*dt*((fluHgIIz[i][j][k]+1.0*Dzz*((HgII[i][j][k]-HgII[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
-           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-1.0*dt*((fluMMHgx[i][j][k]+1.0*Dxx*((MMHg[i][j][k]-MMHg[i-1][j][k])/dx))/dx)-1.0*dt*((fluMMHgy[i][j][k]+1.0*Dyy*((MMHg[i][j][k]-MMHg[i][j-1][k])/dy))/dy)-1.0*dt*((fluMMHgz[i][j][k]+1.0*Dzz*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           Hg0[i][j][k]+= (k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*((fluHg0x[i][j][k]+1.0*Dxx*((Hg0[i][j][k]-Hg0[i-1][j][k])/dx))/dx)-1.0*dt*((fluHg0y[i][j][k]+1.0*Dyy*((Hg0[i][j][k]-Hg0[i][j-1][k])/dy))/dy)-1.0*dt*((fluHg0z[i][j][k]+1.0*Dzz*((Hg0[i][j][k]-Hg0[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-kmeth*HgII[i][j][k]*dt+kdemeth*MMHg[i][j][k]*dt-1.0*dt*((fluHgIIx[i][j][k]+1.0*Dxx*((HgII[i][j][k]-HgII[i-1][j][k])/dx))/dx)-1.0*dt*((fluHgIIy[i][j][k]+1.0*Dyy*((HgII[i][j][k]-HgII[i][j-1][k])/dy))/dy)-1.0*dt*((fluHgIIz[i][j][k]+1.0*Dzz*((HgII[i][j][k]-HgII[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-kdemeth*MMHg[i][j][k]*dt-1.0*dt*((fluMMHgx[i][j][k]+1.0*Dxx*((MMHg[i][j][k]-MMHg[i-1][j][k])/dx))/dx)-1.0*dt*((fluMMHgy[i][j][k]+1.0*Dyy*((MMHg[i][j][k]-MMHg[i][j-1][k])/dy))/dy)-1.0*dt*((fluMMHgz[i][j][k]+1.0*Dzz*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
          //  SPM[i][j][k]+= (SLSPM[i][j][k]+G1[i][j][k]*Wp1*b1[i][j][k])*pow(10.0,-12.0)*dt-1.0*dt*((fluSPMx[i][j][k]+1.0*Dxx*((SPM[i][j][k]-SPM[i-1][j][k])/dx))/dx)-1.0*dt*((fluSPMy[i][j][k]+1.0*Dyy*((SPM[i][j][k]-SPM[i][j-1][k])/dy))/dy)-1.0*dt*((fluSPMz[i][j][k]+1.0*Dzz*((SPM[i][j][k]-SPM[i][j][k-1])/dz))/dz); // Kg/l
            
            if(Rini[i][j][k]==Rbot){
@@ -1781,9 +1867,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            else if(Rini[i-1][j][k]>=Rin && Rini[i][j-1][k]>=Rin && Rini[i][j][k-1]<Rin){
            
            b1[i][j][k]+= G1[i][j][k]*b1[i][j][k]*dt-1.0*dt*((flub1x[i][j][k]+1.0*Dxx*((b1[i][j][k]-b1[i-1][j][k])/dx))/dx)-1.0*dt*((flub1y[i][j][k]+1.0*Dyy*((b1[i][j][k]-b1[i][j-1][k])/dy))/dy)-1.0*dt*(flub1z[i][j][k]/dz); // cell/m^3
-           Hg0[i][j][k]+= (k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3)*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*((fluHg0x[i][j][k]+1.0*Dxx*((Hg0[i][j][k]-Hg0[i-1][j][k])/dx))/dx)-1.0*dt*((fluHg0y[i][j][k]+1.0*Dyy*((Hg0[i][j][k]-Hg0[i][j-1][k])/dy))/dy)-1.0*dt*(fluHg0z[i][j][k]/dz); // ng/l or microg/m^3
-           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3)*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*kmeth*HgII[i][j][k]*dt-1.0*dt*((fluHgIIx[i][j][k]+1.0*Dxx*((HgII[i][j][k]-HgII[i-1][j][k])/dx))/dx)-1.0*dt*((fluHgIIy[i][j][k]+1.0*Dyy*((HgII[i][j][k]-HgII[i][j-1][k])/dy))/dy)-1.0*dt*(fluHgIIz[i][j][k]/dz); // ng/l or microg/m^3
-           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-1.0*dt*((fluMMHgx[i][j][k]+1.0*Dxx*((MMHg[i][j][k]-MMHg[i-1][j][k])/dx))/dx)-1.0*dt*((fluMMHgy[i][j][k]+1.0*Dyy*((MMHg[i][j][k]-MMHg[i][j-1][k])/dy))/dy)-1.0*dt*(fluMMHgz[i][j][k]/dz); // ng/l or microg/m^3
+           Hg0[i][j][k]+= (k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*((fluHg0x[i][j][k]+1.0*Dxx*((Hg0[i][j][k]-Hg0[i-1][j][k])/dx))/dx)-1.0*dt*((fluHg0y[i][j][k]+1.0*Dyy*((Hg0[i][j][k]-Hg0[i][j-1][k])/dy))/dy)-1.0*dt*(fluHg0z[i][j][k]/dz); // ng/l or microg/m^3
+           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-kmeth*HgII[i][j][k]*dt+kdemeth*MMHg[i][j][k]*dt-1.0*dt*((fluHgIIx[i][j][k]+1.0*Dxx*((HgII[i][j][k]-HgII[i-1][j][k])/dx))/dx)-1.0*dt*((fluHgIIy[i][j][k]+1.0*Dyy*((HgII[i][j][k]-HgII[i][j-1][k])/dy))/dy)-1.0*dt*(fluHgIIz[i][j][k]/dz); // ng/l or microg/m^3
+           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-kdemeth*MMHg[i][j][k]*dt-1.0*dt*((fluMMHgx[i][j][k]+1.0*Dxx*((MMHg[i][j][k]-MMHg[i-1][j][k])/dx))/dx)-1.0*dt*((fluMMHgy[i][j][k]+1.0*Dyy*((MMHg[i][j][k]-MMHg[i][j-1][k])/dy))/dy)-1.0*dt*(fluMMHgz[i][j][k]/dz); // ng/l or microg/m^3
          //  SPM[i][j][k]+= (SLSPM[i][j][k]+G1[i][j][k]*Wp1*b1[i][j][k])*pow(10.0,-12.0)*dt-1.0*dt*((fluSPMx[i][j][k]+1.0*Dxx*((SPM[i][j][k]-SPM[i-1][j][k])/dx))/dx)-1.0*dt*((fluSPMy[i][j][k]+1.0*Dyy*((SPM[i][j][k]-SPM[i][j-1][k])/dy))/dy)-1.0*dt*(fluSPMz[i][j][k]/dz); // Kg/l
            
            if(Rini[i][j][k]==Rbot){
@@ -1797,9 +1883,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            else if(Rini[i-1][j][k]>=Rin && Rini[i][j-1][k]<Rin && Rini[i][j][k-1]>=Rin){
            
            b1[i][j][k]+= G1[i][j][k]*b1[i][j][k]*dt-1.0*dt*((flub1x[i][j][k]+1.0*Dxx*((b1[i][j][k]-b1[i-1][j][k])/dx))/dx)-1.0*dt*(flub1y[i][j][k]/dy)-1.0*dt*((flub1z[i][j][k]+1.0*Dzz*((b1[i][j][k]-b1[i][j][k-1])/dz))/dz); // cell/m^3
-           Hg0[i][j][k]+= (k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3)*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*((fluHg0x[i][j][k]+1.0*Dxx*((Hg0[i][j][k]-Hg0[i-1][j][k])/dx))/dx)-1.0*dt*(fluHg0y[i][j][k]/dy)-1.0*dt*((fluHg0z[i][j][k]+1.0*Dzz*((Hg0[i][j][k]-Hg0[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
-           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3)*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*kmeth*HgII[i][j][k]*dt-1.0*dt*((fluHgIIx[i][j][k]+1.0*Dxx*((HgII[i][j][k]-HgII[i-1][j][k])/dx))/dx)-1.0*dt*(fluHgIIy[i][j][k]/dy)-1.0*dt*((fluHgIIz[i][j][k]+1.0*Dzz*((HgII[i][j][k]-HgII[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
-           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-1.0*dt*((fluMMHgx[i][j][k]+1.0*Dxx*((MMHg[i][j][k]-MMHg[i-1][j][k])/dx))/dx)-1.0*dt*(fluMMHgy[i][j][k]/dy)-1.0*dt*((fluMMHgz[i][j][k]+1.0*Dzz*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           Hg0[i][j][k]+= (k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*((fluHg0x[i][j][k]+1.0*Dxx*((Hg0[i][j][k]-Hg0[i-1][j][k])/dx))/dx)-1.0*dt*(fluHg0y[i][j][k]/dy)-1.0*dt*((fluHg0z[i][j][k]+1.0*Dzz*((Hg0[i][j][k]-Hg0[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-kmeth*HgII[i][j][k]*dt+kdemeth*MMHg[i][j][k]*dt-1.0*dt*((fluHgIIx[i][j][k]+1.0*Dxx*((HgII[i][j][k]-HgII[i-1][j][k])/dx))/dx)-1.0*dt*(fluHgIIy[i][j][k]/dy)-1.0*dt*((fluHgIIz[i][j][k]+1.0*Dzz*((HgII[i][j][k]-HgII[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-kdemeth*MMHg[i][j][k]*dt-1.0*dt*((fluMMHgx[i][j][k]+1.0*Dxx*((MMHg[i][j][k]-MMHg[i-1][j][k])/dx))/dx)-1.0*dt*(fluMMHgy[i][j][k]/dy)-1.0*dt*((fluMMHgz[i][j][k]+1.0*Dzz*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
          //  SPM[i][j][k]+= (SLSPM[i][j][k]+G1[i][j][k]*Wp1*b1[i][j][k])*pow(10.0,-12.0)*dt-1.0*dt*((fluSPMx[i][j][k]+1.0*Dxx*((SPM[i][j][k]-SPM[i-1][j][k])/dx))/dx)-1.0*dt*(fluSPMy[i][j][k]/dy)-1.0*dt*((fluSPMz[i][j][k]+1.0*Dzz*((SPM[i][j][k]-SPM[i][j][k-1])/dz))/dz); // Kg/l
            
            if(Rini[i][j][k]==Rbot){
@@ -1813,9 +1899,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            else if(Rini[i-1][j][k]<Rin && Rini[i][j-1][k]>=Rin && Rini[i][j][k-1]>=Rin){
            
            b1[i][j][k]+= G1[i][j][k]*b1[i][j][k]*dt-1.0*dt*(flub1x[i][j][k]/dx)-1.0*dt*((flub1y[i][j][k]+1.0*Dyy*((b1[i][j][k]-b1[i][j-1][k])/dy))/dy)-1.0*dt*((flub1z[i][j][k]+1.0*Dzz*((b1[i][j][k]-b1[i][j][k-1])/dz))/dz); // cell/m^3
-           Hg0[i][j][k]+= (k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3)*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*(fluHg0x[i][j][k]/dx)-1.0*dt*((fluHg0y[i][j][k]+1.0*Dyy*((Hg0[i][j][k]-Hg0[i][j-1][k])/dy))/dy)-1.0*dt*((fluHg0z[i][j][k]+1.0*Dzz*((Hg0[i][j][k]-Hg0[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
-           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3)*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*kmeth*HgII[i][j][k]*dt-1.0*dt*(fluHgIIx[i][j][k]/dx)-1.0*dt*((fluHgIIy[i][j][k]+1.0*Dyy*((HgII[i][j][k]-HgII[i][j-1][k])/dy))/dy)-1.0*dt*((fluHgIIz[i][j][k]+1.0*Dzz*((HgII[i][j][k]-HgII[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
-           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-1.0*dt*(fluMMHgx[i][j][k]/dx)-1.0*dt*((fluMMHgy[i][j][k]+1.0*Dyy*((MMHg[i][j][k]-MMHg[i][j-1][k])/dy))/dy)-1.0*dt*((fluMMHgz[i][j][k]+1.0*Dzz*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           Hg0[i][j][k]+= (k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*(fluHg0x[i][j][k]/dx)-1.0*dt*((fluHg0y[i][j][k]+1.0*Dyy*((Hg0[i][j][k]-Hg0[i][j-1][k])/dy))/dy)-1.0*dt*((fluHg0z[i][j][k]+1.0*Dzz*((Hg0[i][j][k]-Hg0[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-kmeth*HgII[i][j][k]*dt+kdemeth*MMHg[i][j][k]*dt-1.0*dt*(fluHgIIx[i][j][k]/dx)-1.0*dt*((fluHgIIy[i][j][k]+1.0*Dyy*((HgII[i][j][k]-HgII[i][j-1][k])/dy))/dy)-1.0*dt*((fluHgIIz[i][j][k]+1.0*Dzz*((HgII[i][j][k]-HgII[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-kdemeth*MMHg[i][j][k]*dt-1.0*dt*(fluMMHgx[i][j][k]/dx)-1.0*dt*((fluMMHgy[i][j][k]+1.0*Dyy*((MMHg[i][j][k]-MMHg[i][j-1][k])/dy))/dy)-1.0*dt*((fluMMHgz[i][j][k]+1.0*Dzz*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
          //  SPM[i][j][k]+= (SLSPM[i][j][k]+G1[i][j][k]*Wp1*b1[i][j][k])*pow(10.0,-12.0)*dt-1.0*dt*(fluSPMx[i][j][k]/dx)-1.0*dt*((fluSPMy[i][j][k]+1.0*Dyy*((SPM[i][j][k]-SPM[i][j-1][k])/dy))/dy)-1.0*dt*((fluSPMz[i][j][k]+1.0*Dzz*((SPM[i][j][k]-SPM[i][j][k-1])/dz))/dz); // Kg/l
            
            if(Rini[i][j][k]==Rbot){
@@ -1829,9 +1915,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            else if(Rini[i-1][j][k]<Rin && Rini[i][j-1][k]<Rin && Rini[i][j][k-1]>=Rin){
            
            b1[i][j][k]+= G1[i][j][k]*b1[i][j][k]*dt-1.0*dt*(flub1x[i][j][k]/dx)-1.0*dt*(flub1y[i][j][k]/dy)-1.0*dt*((flub1z[i][j][k]+1.0*Dzz*((b1[i][j][k]-b1[i][j][k-1])/dz))/dz); // cell/m^3
-           Hg0[i][j][k]+= (k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3)*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*(fluHg0x[i][j][k]/dx)-1.0*dt*(fluHg0y[i][j][k]/dy)-1.0*dt*((fluHg0z[i][j][k]+1.0*Dzz*((Hg0[i][j][k]-Hg0[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
-           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3)*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*kmeth*HgII[i][j][k]*dt-1.0*dt*(fluHgIIx[i][j][k]/dx)-1.0*dt*(fluHgIIy[i][j][k]/dy)-1.0*dt*((fluHgIIz[i][j][k]+1.0*Dzz*((HgII[i][j][k]-HgII[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
-           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-1.0*dt*(fluMMHgx[i][j][k]/dx)-1.0*dt*(fluMMHgy[i][j][k]/dy)-1.0*dt*((fluMMHgz[i][j][k]+1.0*Dzz*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           Hg0[i][j][k]+= (k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*(fluHg0x[i][j][k]/dx)-1.0*dt*(fluHg0y[i][j][k]/dy)-1.0*dt*((fluHg0z[i][j][k]+1.0*Dzz*((Hg0[i][j][k]-Hg0[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-kmeth*HgII[i][j][k]*dt+kdemeth*MMHg[i][j][k]*dt-1.0*dt*(fluHgIIx[i][j][k]/dx)-1.0*dt*(fluHgIIy[i][j][k]/dy)-1.0*dt*((fluHgIIz[i][j][k]+1.0*Dzz*((HgII[i][j][k]-HgII[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
+           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-kdemeth*MMHg[i][j][k]*dt-1.0*dt*(fluMMHgx[i][j][k]/dx)-1.0*dt*(fluMMHgy[i][j][k]/dy)-1.0*dt*((fluMMHgz[i][j][k]+1.0*Dzz*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz))/dz); // ng/l or microg/m^3
          //  SPM[i][j][k]+= (SLSPM[i][j][k]+G1[i][j][k]*Wp1*b1[i][j][k])*pow(10.0,-12.0)*dt-1.0*dt*(fluSPMx[i][j][k]/dx)-1.0*dt*(fluSPMy[i][j][k]/dy)-1.0*dt*((fluSPMz[i][j][k]+1.0*Dzz*((SPM[i][j][k]-SPM[i][j][k-1])/dz))/dz); // Kg/l
            
            if(Rini[i][j][k]==Rbot){
@@ -1845,9 +1931,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            else if(Rini[i-1][j][k]<Rin && Rini[i][j-1][k]>=Rin && Rini[i][j][k-1]<Rin){
            
            b1[i][j][k]+= G1[i][j][k]*b1[i][j][k]*dt-1.0*dt*(flub1x[i][j][k]/dx)-1.0*dt*((flub1y[i][j][k]+1.0*Dyy*((b1[i][j][k]-b1[i][j-1][k])/dy))/dy)-1.0*dt*(flub1z[i][j][k]/dz); // cell/m^3
-           Hg0[i][j][k]+= (k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3)*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*(fluHg0x[i][j][k]/dx)-1.0*dt*((fluHg0y[i][j][k]+1.0*Dyy*((Hg0[i][j][k]-Hg0[i][j-1][k])/dy))/dy)-1.0*dt*(fluHg0z[i][j][k]/dz); // ng/l or microg/m^3
-           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3)*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*kmeth*HgII[i][j][k]*dt-1.0*dt*(fluHgIIx[i][j][k]/dx)-1.0*dt*((fluHgIIy[i][j][k]+1.0*Dyy*((HgII[i][j][k]-HgII[i][j-1][k])/dy))/dy)-1.0*dt*(fluHgIIz[i][j][k]/dz); // ng/l or microg/m^3
-           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-1.0*dt*(fluMMHgx[i][j][k]/dx)-1.0*dt*((fluMMHgy[i][j][k]+1.0*Dyy*((MMHg[i][j][k]-MMHg[i][j-1][k])/dy))/dy)-1.0*dt*(fluMMHgz[i][j][k]/dz); // ng/l or microg/m^3
+           Hg0[i][j][k]+= (k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*(fluHg0x[i][j][k]/dx)-1.0*dt*((fluHg0y[i][j][k]+1.0*Dyy*((Hg0[i][j][k]-Hg0[i][j-1][k])/dy))/dy)-1.0*dt*(fluHg0z[i][j][k]/dz); // ng/l or microg/m^3
+           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-kmeth*HgII[i][j][k]*dt+kdemeth*MMHg[i][j][k]*dt-1.0*dt*(fluHgIIx[i][j][k]/dx)-1.0*dt*((fluHgIIy[i][j][k]+1.0*Dyy*((HgII[i][j][k]-HgII[i][j-1][k])/dy))/dy)-1.0*dt*(fluHgIIz[i][j][k]/dz); // ng/l or microg/m^3
+           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-kdemeth*MMHg[i][j][k]*dt-1.0*dt*(fluMMHgx[i][j][k]/dx)-1.0*dt*((fluMMHgy[i][j][k]+1.0*Dyy*((MMHg[i][j][k]-MMHg[i][j-1][k])/dy))/dy)-1.0*dt*(fluMMHgz[i][j][k]/dz); // ng/l or microg/m^3
          //  SPM[i][j][k]+= (SLSPM[i][j][k]+G1[i][j][k]*Wp1*b1[i][j][k])*pow(10.0,-12.0)*dt-1.0*dt*(fluSPMx[i][j][k]/dx)-1.0*dt*((fluSPMy[i][j][k]+1.0*Dyy*((SPM[i][j][k]-SPM[i][j-1][k])/dy))/dy)-1.0*dt*(fluSPMz[i][j][k]/dz); // Kg/l
            
            if(Rini[i][j][k]==Rbot){
@@ -1861,9 +1947,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            else if(Rini[i-1][j][k]>=Rin && Rini[i][j-1][k]<Rin && Rini[i][j][k-1]<Rin){
            
            b1[i][j][k]+= G1[i][j][k]*b1[i][j][k]*dt-1.0*dt*((flub1x[i][j][k]+1.0*Dxx*((b1[i][j][k]-b1[i-1][j][k])/dx))/dx)-1.0*dt*(flub1y[i][j][k]/dy)-1.0*dt*(flub1z[i][j][k]/dz); // cell/m^3
-           Hg0[i][j][k]+= (k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3)*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*((fluHg0x[i][j][k]+1.0*Dxx*((Hg0[i][j][k]-Hg0[i-1][j][k])/dx))/dx)-1.0*dt*(fluHg0y[i][j][k]/dy)-1.0*dt*(fluHg0z[i][j][k]/dz); // ng/l or microg/m^3
-           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3)*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*kmeth*HgII[i][j][k]*dt-1.0*dt*((fluHgIIx[i][j][k]+1.0*Dxx*((HgII[i][j][k]-HgII[i-1][j][k])/dx))/dx)-1.0*dt*(fluHgIIy[i][j][k]/dy)-1.0*dt*(fluHgIIz[i][j][k]/dz); // ng/l or microg/m^3
-           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-1.0*dt*((fluMMHgx[i][j][k]+1.0*Dxx*((MMHg[i][j][k]-MMHg[i-1][j][k])/dx))/dx)-1.0*dt*(fluMMHgy[i][j][k]/dy)-1.0*dt*(fluMMHgz[i][j][k]/dz); // ng/l or microg/m^3
+           Hg0[i][j][k]+= (k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*((fluHg0x[i][j][k]+1.0*Dxx*((Hg0[i][j][k]-Hg0[i-1][j][k])/dx))/dx)-1.0*dt*(fluHg0y[i][j][k]/dy)-1.0*dt*(fluHg0z[i][j][k]/dz); // ng/l or microg/m^3
+           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-kmeth*HgII[i][j][k]*dt+kdemeth*MMHg[i][j][k]*dt-1.0*dt*((fluHgIIx[i][j][k]+1.0*Dxx*((HgII[i][j][k]-HgII[i-1][j][k])/dx))/dx)-1.0*dt*(fluHgIIy[i][j][k]/dy)-1.0*dt*(fluHgIIz[i][j][k]/dz); // ng/l or microg/m^3
+           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-kdemeth*MMHg[i][j][k]*dt-1.0*dt*((fluMMHgx[i][j][k]+1.0*Dxx*((MMHg[i][j][k]-MMHg[i-1][j][k])/dx))/dx)-1.0*dt*(fluMMHgy[i][j][k]/dy)-1.0*dt*(fluMMHgz[i][j][k]/dz); // ng/l or microg/m^3
          //  SPM[i][j][k]+= (SLSPM[i][j][k]+G1[i][j][k]*Wp1*b1[i][j][k])*pow(10.0,-12.0)*dt-1.0*dt*((fluSPMx[i][j][k]+1.0*Dxx*((SPM[i][j][k]-SPM[i-1][j][k])/dx))/dx)-1.0*dt*(fluSPMy[i][j][k]/dy)-1.0*dt*(fluSPMz[i][j][k]/dz); // Kg/l
            
            if(Rini[i][j][k]==Rbot){
@@ -1877,9 +1963,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            else{
            
            b1[i][j][k]+= G1[i][j][k]*b1[i][j][k]*dt-1.0*dt*(flub1x[i][j][k]/dx)-1.0*dt*(flub1y[i][j][k]/dy)-1.0*dt*(flub1z[i][j][k]/dz); // cell/m^3
-           Hg0[i][j][k]+= (k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3)*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*(fluHg0x[i][j][k]/dx)-1.0*dt*(fluHg0y[i][j][k]/dy)-1.0*dt*(fluHg0z[i][j][k]/dz); // ng/l or microg/m^3
-           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3)*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4)*HgII[i][j][k]*dt-1.0*kmeth*HgII[i][j][k]*dt-1.0*dt*(fluHgIIx[i][j][k]/dx)-1.0*dt*(fluHgIIy[i][j][k]/dy)-1.0*dt*(fluHgIIz[i][j][k]/dz); // ng/l or microg/m^3
-           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-1.0*dt*(fluMMHgx[i][j][k]/dx)-1.0*dt*(fluMMHgy[i][j][k]/dy)-1.0*dt*(fluMMHgz[i][j][k]/dz); // ng/l or microg/m^3
+           Hg0[i][j][k]+= (k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-1.0*(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt+kPhde*MMHg[i][j][k]*dt-1.0*dt*(fluHg0x[i][j][k]/dx)-1.0*dt*(fluHg0y[i][j][k]/dy)-1.0*dt*(fluHg0z[i][j][k]/dz); // ng/l or microg/m^3
+           HgII[i][j][k]+= (SLII+SIIDOM[i][j][k]-SIISPM[i][j][k])*dt+(k1[i][j][k]+k3[i][j][k])*Hg0[i][j][k]*dt-1.0*(k2[i][j][k]+k4[i][j][k])*HgII[i][j][k]*dt-kmeth*HgII[i][j][k]*dt+kdemeth*MMHg[i][j][k]*dt-1.0*dt*(fluHgIIx[i][j][k]/dx)-1.0*dt*(fluHgIIy[i][j][k]/dy)-1.0*dt*(fluHgIIz[i][j][k]/dz); // ng/l or microg/m^3
+           MMHg[i][j][k]+= (SLMM+SMMDOM[i][j][k]-SMMSPM[i][j][k])*dt-1.0*kPhde*MMHg[i][j][k]*dt+kmeth*HgII[i][j][k]*dt-kdemeth*MMHg[i][j][k]*dt-1.0*dt*(fluMMHgx[i][j][k]/dx)-1.0*dt*(fluMMHgy[i][j][k]/dy)-1.0*dt*(fluMMHgz[i][j][k]/dz); // ng/l or microg/m^3
          //  SPM[i][j][k]+= (SLSPM[i][j][k]+G1[i][j][k]*Wp1*b1[i][j][k])*pow(10.0,-12.0)*dt-1.0*dt*(fluSPMx[i][j][k]/dx)-1.0*dt*(fluSPMy[i][j][k]/dy)-1.0*dt*(fluSPMz[i][j][k]/dz); // Kg/l
            
            if(Rini[i][j][k]==Rbot){
@@ -2001,23 +2087,24 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
 				chlatot[i][j][k]=0.0;
 			}
            
-          // SPIM[i][j][k]=(1.0-forg[i][j][k])*SPM[i][j][k]; //  Kg/l
+          SPIM[i][j][k]=SPM[i][j][k]-SPOM[i][j][k]; //  Kg/l
           // SPOM[i][j][k]=forg[i][j][k]*SPM[i][j][k]; //  Kg/l
            
            vz[i][j][k]=vz0; // m/h
            
-           peratio=-0.0081*Tatm+0.0806*log(chlas)+0.426; //dimensionless
-           OCRR=(NPP/(12.011*75.0))*(1.0-peratio); // mol/m^3 *h
-           k3=k3bio*OCRR; // h
-           k4=k4bio*OCRR; //h
+           NPP[i][j][k]=pow(10.0,(2.09+0.81*log10(chlatot[i][j][k])))*(pow(10.0,-3.0)/24.0); // g/m^2*h
+           peratio[i][j][k]=-0.0081*Tatm+0.0806*log(chlatot[i][j][k])+0.426; //dimensionless
+           OCRR[i][j][k]=(NPP[i][j][k]/(12.011*75.0))*(1.0-peratio[i][j][k]); // mol/m^3 *h
+           k3[i][j][k]=k3bio*OCRR[i][j][k]; // h
+           k4[i][j][k]=k4bio*OCRR[i][j][k]; //h
             
            if(k==1){
-               SIISPM[i][j][k]=NPP*peratio*(kD0/forg[i][j][k])*pow(10,-6.0)*(HgII[i][j][k]/(dz/2.0));
-               SMMSPM[i][j][k]=NPP*peratio*(kD0/forg[i][j][k])*pow(10,-6.0)*(MMHg[i][j][k]/(dz/2.0));
+               SIISPM[i][j][k]=NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*(HgII[i][j][k]/dz)+vset*kDIIsilt*((SPIM[i][j][k]*HgII[i][j][k])/dz); //microg/m^3*h
+               SMMSPM[i][j][k]=NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*(MMHg[i][j][k]/dz)+vset*kDMMsilt*((SPIM[i][j][k]*MMHg[i][j][k])/dz); //microg/m^3*h
            }
            else{
-               SIISPM[i][j][k]=NPP*peratio*(kD0/forg[i][j][k])*pow(10,-6.0)*((HgII[i][j][k]-HgII[i][j][k-1])/dz); // microg/(m^3*h)
-               SMMSPM[i][j][k]=NPP*peratio*(kD0/forg[i][j][k])*pow(10,-6.0)*((MMHg[i][j][k]-MMHg[i][j][k-1])/dz); // microg/(m^3*h)
+               SIISPM[i][j][k]=(NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*HgII[i][j][k]-NPP[i][j][k-1]*peratio[i][j][k-1]*(kD0/forg[i][j][k-1])*HgII[i][j][k-1])*(pow(10,-6.0)/dz)+vset*kDIIsilt*((SPIM[i][j][k]*HgII[i][j][k]-SPIM[i][j][k-1]*HgII[i][j][k-1])/dz); //microg/m^3*h
+               SMMSPM[i][j][k]=(NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*MMHg[i][j][k]-NPP[i][j][k-1]*peratio[i][j][k-1]*(kD0/forg[i][j][k-1])*MMHg[i][j][k-1])*(pow(10,-6.0)/dz)+vset*kDMMsilt*((SPIM[i][j][k]*MMHg[i][j][k]-SPIM[i][j][k-1]*MMHg[i][j][k-1])/dz); //microg/m^3*h
            }
            
            TotSIISPM += SIISPM[i][j][k]*dx*dy*dz*dt*pow(10,-9.0)*(1.0/PMHgII); // kmol
@@ -2063,7 +2150,7 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            PMMHg[i][j][k]=0.0; //  microg
            PHg[i][j][k]=0.0; 
            THg[i][j][k]=0.0;
-           //SPIM[i][j][k]=0.0; // in Kg/l
+           SPIM[i][j][k]=0.0; // in Kg/l
            //SPOM[i][j][k]=0.0; // in Kg/l
            chla1[i][j][k]=0.0; // mg/m^3
            chlatot[i][j][k]=0.0; // mg/m^3
@@ -2817,15 +2904,15 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
      }
   }  
    
-   
+   /*
     for(i=0; i<=I; i++){ // rispetto allo spazio x
         for(j=0; j<=J; j++){ // rispetto allo spazio y 
 
         if(Rini[i][j][1]>=Rin){
                
                fluHg0z[i][j][0]=(Hggas*(Pr/det)*pow(10.0,-3.0)+MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1])); // // microg/(m^2*h)
-               fluHgIIz[i][j][0]=HgIIatm*(Pr/det)*pow(10.0,-3.0); // microg/(m^2*h)
-               fluMMHgz[i][j][0]=MMHgatm*(Pr/det)*pow(10.0,-3.0); // microg/(m^2*h)
+               fluHgIIz[i][j][0]=HgIIatm*(Pr/det)*pow(10.0,-3.0)+DrydepHgII; // microg/(m^2*h)
+               fluMMHgz[i][j][0]=0.005025*(HgIIatm*(Pr/det)*pow(10.0,-3.0)+DrydepHgII);//MMHgatm*(Pr/det)*pow(10.0,-3.0); // microg/(m^2*h)
             //   fluSPMz[i][j][0]=phiSPMatm*pow(10.0,-6.0); // Kg*m/l*h
                flub1z[i][j][0]=0.0;
                fluRz[i][j][0]=0.0;
@@ -2833,8 +2920,8 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
         }
         else{
                fluHg0z[i][j][0]=(Hggas*(Pr/det))*pow(10.0,-3.0); // // microg/(m^2*h) 
-               fluHgIIz[i][j][0]=HgIIatm*(Pr/det)*pow(10.0,-3.0); // microg/(m^2*h)
-               fluMMHgz[i][j][0]=MMHgatm*(Pr/det)*pow(10.0,-3.0); // microg/(m^2*h)
+               fluHgIIz[i][j][0]=HgIIatm*(Pr/det)*pow(10.0,-3.0)+DrydepHgII; // microg/(m^2*h)
+               fluMMHgz[i][j][0]=0.005025*(HgIIatm*(Pr/det)*pow(10.0,-3.0)+DrydepHgII); // microg/(m^2*h)
             //   fluSPMz[i][j][0]=phiSPMatm*pow(10.0,-6.0); // Kg*m/l*h
                flub1z[i][j][0]=0.0;
                fluRz[i][j][0]=0.0;
@@ -2880,6 +2967,7 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
          
         } 
     }
+  */
   
    for(i=1; i<=I; i++){ // rispetto allo spazio x
        for(j=1; j<=J; j++){ // rispetto allo spazio y
@@ -2889,8 +2977,8 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
                flub1z[i][j][1]=0.0;
                fluRz[i][j][1]=0.0;
                fluHg0z[i][j][1]=-1.0*Hggas*(Pr/det)*pow(10.0,-3.0)-1.0*MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1]); // microg/(m^2*h)
-               fluHgIIz[i][j][1]=-1.0*HgIIatm*(Pr/det)*pow(10.0,-3.0)-1.0*MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][1])+1.0*HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]; // microg/(m^2*h)
-               fluMMHgz[i][j][1]=-1.0*MMHgatm*(Pr/det)*pow(10.0,-3.0)-1.0*MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][1])+1.0*MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]; // microg/(m^2*h)  
+               fluHgIIz[i][j][1]=-1.0*HgIIatm*(Pr/det)*pow(10.0,-3.0)-DrydepHgII-1.0*MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][1]); // microg/(m^2*h)
+               fluMMHgz[i][j][1]=-0.005025*(HgIIatm*(Pr/det)*pow(10.0,-3.0)+DrydepHgII)-1.0*MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][1]); // microg/(m^2*h)  
             //   fluSPMz[i][j][1]=-1.0*phiSPMatm*pow(10.0,-6.0)+dep[i][j]*SWsed[i][j]; // Kg*m/l*h       
                  
        }
@@ -2899,14 +2987,14 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
                if(vz[i][j][1]>=0.000000){
                fluRz[i][j][1]=-1.0*Dzz*((R[i][j][2]-R[i][j][1])/dz);
                fluHg0z[i][j][1]=-1.0*Hggas*(Pr/det)*pow(10.0,-3.0)-1.0*MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1])+vz[i][j][1]*(Hg0[i][j][1])-1.0*Dzz*((Hg0[i][j][2]-Hg0[i][j][1])/dz);
-               fluHgIIz[i][j][1]=-1.0*HgIIatm*(Pr/det)*pow(10.0,-3.0)-1.0*Dzz*((HgII[i][j][2]-HgII[i][j][1])/dz);
-               fluMMHgz[i][j][1]=-1.0*MMHgatm*(Pr/det)*pow(10.0,-3.0)-1.0*Dzz*((MMHg[i][j][2]-MMHg[i][j][1])/dz);
+               fluHgIIz[i][j][1]=-1.0*HgIIatm*(Pr/det)*pow(10.0,-3.0)-DrydepHgII-1.0*Dzz*((HgII[i][j][2]-HgII[i][j][1])/dz);
+               fluMMHgz[i][j][1]=-0.005025*(HgIIatm*(Pr/det)*pow(10.0,-3.0)+DrydepHgII)-1.0*Dzz*((MMHg[i][j][2]-MMHg[i][j][1])/dz);
                }
                else if(vz[i][j][1]<0.000000){
                fluRz[i][j][1]=vz[i][j][1]*(R[i][j][2]-R[i][j][1])-1.0*Dzz*((R[i][j][2]-R[i][j][1])/dz);
                fluHg0z[i][j][1]=-1.0*Hggas*(Pr/det)*pow(10.0,-3.0)-1.0*MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1])+vz[i][j][1]*(Hg0[i][j][2]-Hg0[i][j][1])-1.0*Dzz*((Hg0[i][j][2]-Hg0[i][j][1])/dz);
-               fluHgIIz[i][j][1]=-1.0*HgIIatm*(Pr/det)*pow(10.0,-3.0)+vz[i][j][1]*(HgII[i][j][2]-HgII[i][j][1])-1.0*Dzz*((HgII[i][j][2]-HgII[i][j][1])/dz);
-               fluMMHgz[i][j][1]=-1.0*MMHgatm*(Pr/det)*pow(10.0,-3.0)+vz[i][j][1]*(MMHg[i][j][2]-MMHg[i][j][1])-1.0*Dzz*((MMHg[i][j][2]-MMHg[i][j][1])/dz);
+               fluHgIIz[i][j][1]=-1.0*HgIIatm*(Pr/det)*pow(10.0,-3.0)-DrydepHgII+vz[i][j][1]*(HgII[i][j][2]-HgII[i][j][1])-1.0*Dzz*((HgII[i][j][2]-HgII[i][j][1])/dz);
+               fluMMHgz[i][j][1]=-0.005025*(HgIIatm*(Pr/det)*pow(10.0,-3.0)+DrydepHgII)+vz[i][j][1]*(MMHg[i][j][2]-MMHg[i][j][1])-1.0*Dzz*((MMHg[i][j][2]-MMHg[i][j][1])/dz);
                }
                else{
                fluRz[i][j][1]=0.0;
@@ -3085,8 +3173,8 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
             if(Rini[i][j][k]==Rbot){
 			   fluRz[i][j][k]=0.0;
                fluHg0z[i][j][k]=0.0;
-               fluHgIIz[i][j][k]=-1.0*MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])+1.0*HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]; // microg/(m^2*h)
-               fluMMHgz[i][j][k]=-1.0*MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])+1.0*MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]; // microg/(m^2*h)  
+               fluHgIIz[i][j][k]=-1.0*MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k]); // microg/(m^2*h)
+               fluMMHgz[i][j][k]=-1.0*MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k]); // microg/(m^2*h)  
             }
             else if(Rini[i][j][k-1]==Rin && Rini[i][j][k]==Rin && Rini[i][j][k+1]>=Rin &&  vz[i][j][k]>=0.000000){
 			   fluRz[i][j][k]=vz[i][j][k]*(R[i][j][k]-R[i][j][k-1])-1.0*Dzz*((R[i][j][k+1]-R[i][j][k])/dz);
@@ -3200,14 +3288,14 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
                
             if(vx[I][L][k]<=0.000000){
                sumfluHg0x[I][L]=vx[I][L][k]*(0.2*DHgexts27)-1.0*Dxx*((0.2*DHgexts27-Hg0[I][L][k])/dx);
-               sumfluHgIIx[I][L]=vx[I][L][k]*(0.794*DHgexts27)-1.0*Dxx*((0.794*DHgexts27-HgII[I][L][k])/dx);
-               sumfluMMHgx[I][L]=vx[I][L][k]*(0.006*DHgexts27)-1.0*Dxx*((0.006*DHgexts27-MMHg[I][L][k])/dx);
+               sumfluHgIIx[I][L]=(vx[I][L][k]*(0.794*DHgexts27)-1.0*Dxx*((0.794*DHgexts27-HgII[I][L][k])/dx))*(1.0+kDSPM0*SPM[I][L][k]);
+               sumfluMMHgx[I][L]=(vx[I][L][k]*(0.006*DHgexts27)-1.0*Dxx*((0.006*DHgexts27-MMHg[I][L][k])/dx))*(1.0+kDSPM0*SPM[I][L][k]);
                sumfluTHgx[I][L]=vx[I][L][k]*(THgexts27)-1.0*Dxx*((THgexts27-THg[I][L][k])/dx);
             }
             else{                                       
                sumfluHg0x[I][L]=vx[I][L][k]*(Hg0[I][L][k])-1.0*Dxx*((0.2*DHgexts27-Hg0[I][L][k])/dx);
-               sumfluHgIIx[I][L]=vx[I][L][k]*(HgII[I][L][k])-1.0*Dxx*((0.794*DHgexts27-HgII[I][L][k])/dx);
-               sumfluMMHgx[I][L]=vx[I][L][k]*(MMHg[I][L][k])-1.0*Dxx*((0.006*DHgexts27-MMHg[I][L][k])/dx);
+               sumfluHgIIx[I][L]=(vx[I][L][k]*(HgII[I][L][k])-1.0*Dxx*((0.794*DHgexts27-HgII[I][L][k])/dx))*(1.0+kDSPM0*SPM[I][L][k]);
+               sumfluMMHgx[I][L]=(vx[I][L][k]*(MMHg[I][L][k])-1.0*Dxx*((0.006*DHgexts27-MMHg[I][L][k])/dx))*(1.0+kDSPM0*SPM[I][L][k]);
                sumfluTHgx[I][L]=vx[I][L][k]*(THg[I][L][k])-1.0*Dxx*((THgexts27-THg[I][L][k])/dx); 
             }   
             
@@ -3216,14 +3304,14 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            
             if(vx[I][L][k]<=0.000000){
                sumfluHg0x[I][L]+=vx[I][L][k]*(0.2*DHgexts27)-1.0*Dxx*((0.2*DHgexts27-Hg0[I][L][k])/dx);
-               sumfluHgIIx[I][L]+=vx[I][L][k]*(0.794*DHgexts27)-1.0*Dxx*((0.794*DHgexts27-HgII[I][L][k])/dx);
-               sumfluMMHgx[I][L]+=vx[I][L][k]*(0.006*DHgexts27)-1.0*Dxx*((0.006*DHgexts27-MMHg[I][L][k])/dx);
+               sumfluHgIIx[I][L]+=(vx[I][L][k]*(0.794*DHgexts27)-1.0*Dxx*((0.794*DHgexts27-HgII[I][L][k])/dx))*(1.0+kDSPM0*SPM[I][L][k]);
+               sumfluMMHgx[I][L]+=(vx[I][L][k]*(0.006*DHgexts27)-1.0*Dxx*((0.006*DHgexts27-MMHg[I][L][k])/dx))*(1.0+kDSPM0*SPM[I][L][k]);
                sumfluTHgx[I][L]+=vx[I][L][k]*(THgexts27)-1.0*Dxx*((THgexts27-THg[I][L][k])/dx);
             }
             else{                                       
                sumfluHg0x[I][L]+=vx[I][L][k]*(Hg0[I][L][k])-1.0*Dxx*((0.2*DHgexts27-Hg0[I][L][k])/dx);
-               sumfluHgIIx[I][L]+=vx[I][L][k]*(HgII[I][L][k])-1.0*Dxx*((0.794*DHgexts27-HgII[I][L][k])/dx);
-               sumfluMMHgx[I][L]+=vx[I][L][k]*(MMHg[I][L][k])-1.0*Dxx*((0.006*DHgexts27-MMHg[I][L][k])/dx);
+               sumfluHgIIx[I][L]+=(vx[I][L][k]*(HgII[I][L][k])-1.0*Dxx*((0.794*DHgexts27-HgII[I][L][k])/dx))*(1.0+kDSPM0*SPM[I][L][k]);
+               sumfluMMHgx[I][L]+=(vx[I][L][k]*(MMHg[I][L][k])-1.0*Dxx*((0.006*DHgexts27-MMHg[I][L][k])/dx))*(1.0+kDSPM0*SPM[I][L][k]);
                sumfluTHgx[I][L]+=vx[I][L][k]*(THg[I][L][k])-1.0*Dxx*((THgexts27-THg[I][L][k])/dx);
             }  
             
@@ -3243,27 +3331,27 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
                
             if(vy[C][J][k]<=0.000000){
                sumfluHg0y[C][J]=vy[C][J][k]*(0.2*DHgextb26)-1.0*Dyy*((0.2*DHgextb26-Hg0[C][J][k])/dy);
-               sumfluHgIIy[C][J]=vy[C][J][k]*(0.794*DHgextb26)-1.0*Dyy*((0.794*DHgextb26-HgII[C][J][k])/dy);
-               sumfluMMHgy[C][J]=vy[C][J][k]*(0.006*DHgextb26)-1.0*Dyy*((0.006*DHgextb26-MMHg[C][J][k])/dy);
+               sumfluHgIIy[C][J]=(vy[C][J][k]*(0.794*DHgextb26)-1.0*Dyy*((0.794*DHgextb26-HgII[C][J][k])/dy))*(1.0+kDSPM0*SPM[C][J][k]);
+               sumfluMMHgy[C][J]=(vy[C][J][k]*(0.006*DHgextb26)-1.0*Dyy*((0.006*DHgextb26-MMHg[C][J][k])/dy))*(1.0+kDSPM0*SPM[C][J][k]);
                sumfluTHgy[C][J]=vy[C][J][k]*(THgexts26)-1.0*Dyy*((THgexts26-THg[C][J][k])/dy);
             }
             else{                                       
                sumfluHg0y[C][J]=vy[C][J][k]*(Hg0[C][J][k])-1.0*Dyy*((0.2*DHgextm26-Hg0[C][J][k])/dy);
-               sumfluHgIIy[C][J]=vy[C][J][k]*(HgII[C][J][k])-1.0*Dyy*((0.794*DHgextm26-HgII[C][J][k])/dy);
-               sumfluMMHgy[C][J]=vy[C][J][k]*(MMHg[C][J][k])-1.0*Dyy*((0.006*DHgextm26-MMHg[C][J][k])/dy);
+               sumfluHgIIy[C][J]=(vy[C][J][k]*(HgII[C][J][k])-1.0*Dyy*((0.794*DHgextm26-HgII[C][J][k])/dy))*(1.0+kDSPM0*SPM[C][J][k]);
+               sumfluMMHgy[C][J]=(vy[C][J][k]*(MMHg[C][J][k])-1.0*Dyy*((0.006*DHgextm26-MMHg[C][J][k])/dy))*(1.0+kDSPM0*SPM[C][J][k]);
                sumfluTHgy[C][J]=vy[C][J][k]*(THg[C][J][k])-1.0*Dyy*((THgexts26-THg[C][J][k])/dy);  
             }  
                
             if(vx[C][J][k]<=0.000000){
                sumfluHg0xs[C][J]=vx[C][J][k]*(Hg0[C+1][J][k])-1.0*Dxx*((Hg0[C+1][J][k]-Hg0[C][J][k])/dx);
-               sumfluHgIIxs[C][J]=vx[C][J][k]*(HgII[C+1][J][k])-1.0*Dxx*((HgII[C+1][J][k]-HgII[C][J][k])/dx);
-               sumfluMMHgxs[C][J]=vx[C][J][k]*(MMHg[C+1][J][k])-1.0*Dxx*((MMHg[C+1][J][k]-MMHg[C][J][k])/dx);
+               sumfluHgIIxs[C][J]=(vx[C][J][k]*(HgII[C+1][J][k])-1.0*Dxx*((HgII[C+1][J][k]-HgII[C][J][k])/dx))*(1.0+kDSPM0*SPM[C][J][k]);
+               sumfluMMHgxs[C][J]=(vx[C][J][k]*(MMHg[C+1][J][k])-1.0*Dxx*((MMHg[C+1][J][k]-MMHg[C][J][k])/dx))*(1.0+kDSPM0*SPM[C][J][k]);
                sumfluTHgxs[C][J]=vx[C][J][k]*(THg[C+1][J][k])-1.0*Dxx*((THg[C+1][J][k]-THg[C][J][k])/dx);
             }
             else{                                       
                sumfluHg0xs[C][J]=vx[C][J][k]*(Hg0[C][J][k])-1.0*Dxx*((Hg0[C+1][J][k]-Hg0[C][J][k])/dx);
-               sumfluHgIIxs[C][J]=vx[C][J][k]*(HgII[C][J][k])-1.0*Dxx*((HgII[C+1][J][k]-HgII[C][J][k])/dx);
-               sumfluMMHgxs[C][J]=vx[C][J][k]*(MMHg[C][J][k])-1.0*Dxx*((MMHg[C+1][J][k]-MMHg[C][J][k])/dx);
+               sumfluHgIIxs[C][J]=(vx[C][J][k]*(HgII[C][J][k])-1.0*Dxx*((HgII[C+1][J][k]-HgII[C][J][k])/dx))*(1.0+kDSPM0*SPM[C][J][k]);
+               sumfluMMHgxs[C][J]=(vx[C][J][k]*(MMHg[C][J][k])-1.0*Dxx*((MMHg[C+1][J][k]-MMHg[C][J][k])/dx))*(1.0+kDSPM0*SPM[C][J][k]);
                sumfluTHgxs[C][J]=vx[C][J][k]*(THg[C][J][k])-1.0*Dxx*((THg[C+1][J][k]-THg[C][J][k])/dx);
             }
             
@@ -3272,27 +3360,27 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            
             if(vy[C][J][k]<=0.000000){
                sumfluHg0y[C][J]+=vy[C][J][k]*(0.2*DHgextb26)-1.0*Dyy*((0.2*DHgextb26-Hg0[C][J][k])/dy);
-               sumfluHgIIy[C][J]+=vy[C][J][k]*(0.794*DHgextb26)-1.0*Dyy*((0.794*DHgextb26-HgII[C][J][k])/dy);
-               sumfluMMHgy[C][J]+=vy[C][J][k]*(0.006*DHgextb26)-1.0*Dyy*((0.006*DHgextb26-MMHg[C][J][k])/dy);
+               sumfluHgIIy[C][J]+=(vy[C][J][k]*(0.794*DHgextb26)-1.0*Dyy*((0.794*DHgextb26-HgII[C][J][k])/dy))*(1.0+kDSPM0*SPM[C][J][k]);
+               sumfluMMHgy[C][J]+=(vy[C][J][k]*(0.006*DHgextb26)-1.0*Dyy*((0.006*DHgextb26-MMHg[C][J][k])/dy))*(1.0+kDSPM0*SPM[C][J][k]);
                sumfluTHgy[C][J]+=vy[C][J][k]*(THgexts26)-1.0*Dyy*((THgexts26-THg[C][J][k])/dy);
             }
             else{                                       
                sumfluHg0y[C][J]+=vy[C][J][k]*(Hg0[C][J][k])-1.0*Dyy*((0.2*DHgextm26-Hg0[C][J][k])/dy);
-               sumfluHgIIy[C][J]+=vy[C][J][k]*(HgII[C][J][k])-1.0*Dyy*((0.794*DHgextm26-HgII[C][J][k])/dy);
-               sumfluMMHgy[C][J]+=vy[C][J][k]*(MMHg[C][J][k])-1.0*Dyy*((0.006*DHgextm26-MMHg[C][J][k])/dy);
+               sumfluHgIIy[C][J]+=(vy[C][J][k]*(HgII[C][J][k])-1.0*Dyy*((0.794*DHgextm26-HgII[C][J][k])/dy))*(1.0+kDSPM0*SPM[C][J][k]);
+               sumfluMMHgy[C][J]+=(vy[C][J][k]*(MMHg[C][J][k])-1.0*Dyy*((0.006*DHgextm26-MMHg[C][J][k])/dy))*(1.0+kDSPM0*SPM[C][J][k]);
                sumfluTHgy[C][J]+=vy[C][J][k]*(THg[C][J][k])-1.0*Dyy*((THgexts26-THg[C][J][k])/dy);
             }  
                
             if(vx[C][J][k]<=0.000000){
                sumfluHg0xs[C][J]+=vx[C][J][k]*(Hg0[C+1][J][k])-1.0*Dxx*((Hg0[C+1][J][k]-Hg0[C][J][k])/dx);
-               sumfluHgIIxs[C][J]+=vx[C][J][k]*(HgII[C+1][J][k])-1.0*Dxx*((HgII[C+1][J][k]-HgII[C][J][k])/dx);
-               sumfluMMHgxs[C][J]+=vx[C][J][k]*(MMHg[C+1][J][k])-1.0*Dxx*((MMHg[C+1][J][k]-MMHg[C][J][k])/dx);
+               sumfluHgIIxs[C][J]+=(vx[C][J][k]*(HgII[C+1][J][k])-1.0*Dxx*((HgII[C+1][J][k]-HgII[C][J][k])/dx))*(1.0+kDSPM0*SPM[C][J][k]);
+               sumfluMMHgxs[C][J]+=(vx[C][J][k]*(MMHg[C+1][J][k])-1.0*Dxx*((MMHg[C+1][J][k]-MMHg[C][J][k])/dx))*(1.0+kDSPM0*SPM[C][J][k]);
                sumfluTHgxs[C][J]+=vx[C][J][k]*(THg[C+1][J][k])-1.0*Dxx*((THg[C+1][J][k]-THg[C][J][k])/dx);
             }
             else{                                       
                sumfluHg0xs[C][J]+=vx[C][J][k]*(Hg0[C][J][k])-1.0*Dxx*((Hg0[C+1][J][k]-Hg0[C][J][k])/dx);
-               sumfluHgIIxs[C][J]+=vx[C][J][k]*(HgII[C][J][k])-1.0*Dxx*((HgII[C+1][J][k]-HgII[C][J][k])/dx);
-               sumfluMMHgxs[C][J]+=vx[C][J][k]*(MMHg[C][J][k])-1.0*Dxx*((MMHg[C+1][J][k]-MMHg[C][J][k])/dx);
+               sumfluHgIIxs[C][J]+=(vx[C][J][k]*(HgII[C][J][k])-1.0*Dxx*((HgII[C+1][J][k]-HgII[C][J][k])/dx))*(1.0+kDSPM0*SPM[C][J][k]);
+               sumfluMMHgxs[C][J]+=(vx[C][J][k]*(MMHg[C][J][k])-1.0*Dxx*((MMHg[C+1][J][k]-MMHg[C][J][k])/dx))*(1.0+kDSPM0*SPM[C][J][k]);
                sumfluTHgxs[C][J]+=vx[C][J][k]*(THg[C][J][k])-1.0*Dxx*((THg[C+1][J][k]-THg[C][J][k])/dx);
             }
       }
@@ -3315,8 +3403,8 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            for(k=1; k<=K; k++){ // rispetto allo spazio y
        
            if(Rini[i][j][k]==Rbot){  
-               fluxHgIIsed[i][j] = MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*24.0-HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*24.0; // microg/m^2*d
-               fluxMMHgsed[i][j] = MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*24.0-MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*24.0; // microg/m^2*d    
+               fluxHgIIsed[i][j] = MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*24.0; // microg/m^2*d
+               fluxMMHgsed[i][j] = MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*24.0; // microg/m^2*d    
            }
             
            }
@@ -3330,8 +3418,8 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            if(Rini[i][j][1]>=Rin){
                fluxHg0atm[i][j] = -1.0*MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1])*pow(10.0,3.0); // ng/m^2*h
                fluxHg0dep[i][j] = Hggas*(Pr/det); // ng/m^2*h
-               fluxHgIIdep[i][j] = HgIIatm*(Pr/det); // ng/m^2*h  
-               fluxMMHgdep[i][j] = MMHgatm*(Pr/det); // ng/m^2*h 
+               fluxHgIIdep[i][j] = HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0); // ng/m^2*h  
+               fluxMMHgdep[i][j] = 0.005025*(HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0)); //MMHgatm*(Pr/det); // ng/m^2*h 
            }
            else{
                fluxHg0atm[i][j] = 0.0; // ng/m^2*h
@@ -3367,18 +3455,51 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
     fluMMHgzsed=0.0;
     fluHgIIzbur=0.0;
     fluMMHgzbur=0.0;
+    fluHgIIzbur2=0.0;
+    fluMMHgzbur2=0.0;
+    fluHgIIzbur3=0.0;
+    fluMMHgzbur3=0.0;
+    fluHgIIzbur4=0.0;
+    fluMMHgzbur4=0.0;
+    fluHgIIzbur5=0.0;
+    fluMMHgzbur5=0.0;
     fluHgIIzsedext1=0.0;
     fluMMHgzsedext1=0.0;
     fluHgIIzburext1=0.0;
     fluMMHgzburext1=0.0;
+    fluHgIIzburext12=0.0;
+    fluMMHgzburext12=0.0;
+    fluHgIIzburext13=0.0;
+    fluMMHgzburext13=0.0;
+    fluHgIIzburext14=0.0;
+    fluMMHgzburext14=0.0;
+    fluHgIIzburext15=0.0;
+    fluMMHgzburext15=0.0;
     fluHgIIzsedext2=0.0;
     fluMMHgzsedext2=0.0;
     fluHgIIzburext2=0.0;
     fluMMHgzburext2=0.0;
+    fluHgIIzburext22=0.0;
+    fluMMHgzburext22=0.0;
+    fluHgIIzburext23=0.0;
+    fluMMHgzburext23=0.0;
+    fluHgIIzburext24=0.0;
+    fluMMHgzburext24=0.0;
+    fluHgIIzburext25=0.0;
+    fluMMHgzburext25=0.0;
     fluHgIIzsedext3=0.0;
     fluMMHgzsedext3=0.0;
     fluHgIIzburext3=0.0;
     fluMMHgzburext3=0.0;
+    fluHgIIzburext32=0.0;
+    fluMMHgzburext32=0.0;
+    fluHgIIzburext33=0.0;
+    fluMMHgzburext33=0.0;
+    fluHgIIzburext34=0.0;
+    fluMMHgzburext34=0.0;
+    fluHgIIzburext35=0.0;
+    fluMMHgzburext35=0.0;
+    
     fluxHg0zatm=0.0;
     fluxHg0zdep=0.0;
     fluxHgIIzdep=0.0;
@@ -3406,23 +3527,40 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            for(k=1; k<=K; k++){ // rispetto allo spazio y
        
            if(Rini[i][j][k]==Rbot){  
-               fluHgIIzsed += MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*dx*dy-HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
-               fluMMHgzsed += MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*dx*dy-MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h   
-               fluHgIIzbur += HgIIpw[i][j][1]*kDIIsed*SWsed[i][j]*dep[i][j]*dx*dy+HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
-               fluMMHgzbur += MMHgpw[i][j][1]*kDMMsed*SWsed[i][j]*dep[i][j]*dx*dy+MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzsed += MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*dx*dy; // microg/h
+               fluMMHgzsed += MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*dx*dy; // microg/h   
+               fluHgIIzbur += THgsed[i][j][1]*(1.0-kMM)*(1.0-porsed[i][j][1])*SDsed*dep[i][j]*pow(10.0,6.0)*dx*dy;//+HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluMMHgzbur += THgsed[i][j][1]*kMM*(1.0-porsed[i][j][1])*SDsed*dep[i][j]*pow(10.0,6.0)*dx*dy;//+MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzbur2 += NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*HgII[i][j][k]*dx*dy; //microg/h
+               fluMMHgzbur2 += NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*MMHg[i][j][k]*dx*dy; //microg/h
+               fluHgIIzbur3 += THgsed[i][j][1]*(1.0-kMM)*(1.0-porsed[i][j][1])*SDsed*depmed*pow(10.0,6.0)*dx*dy+HgIIpw[i][j][1]*porsed[i][j][1]*depmed*dx*dy; // microg/h
+               fluMMHgzbur3 += THgsed[i][j][1]*kMM*(1.0-porsed[i][j][1])*SDsed*depmed*pow(10.0,6.0)*dx*dy+MMHgpw[i][j][1]*porsed[i][j][1]*depmed*dx*dy; // microg/h
+               fluHgIIzbur4 += kD0*SPM[i][j][k]*HgII[i][j][k]*dep[i][j]*dx*dy; // microg/h
+               fluMMHgzbur4 += kD0*SPM[i][j][k]*MMHg[i][j][k]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzbur5 += kD0*SPM[i][j][k]*HgII[i][j][k]*depmed*dx*dy; // microg/h
+               fluMMHgzbur5 += kD0*SPM[i][j][k]*MMHg[i][j][k]*depmed*dx*dy; // microg/h
+
            }
            else{
                fluHgIIzsed += 0.0;
                fluMMHgzsed += 0.0;
                fluHgIIzbur += 0.0; // microg/h
                fluMMHgzbur += 0.0; // microg/h
+               fluHgIIzbur2 += 0.0; // microg/h
+               fluMMHgzbur2 += 0.0; // microg/h
+               fluHgIIzbur3 += 0.0; // microg/h
+               fluMMHgzbur3 += 0.0; // microg/h
+               fluHgIIzbur4 += 0.0; // microg/h
+               fluMMHgzbur4 += 0.0; // microg/h
+               fluHgIIzbur5 += 0.0; // microg/h
+               fluMMHgzbur5 += 0.0; // microg/h
            } 
            
            if(Rini[i][j][1]>=Rin && Rini[i][j][k]==Rbot){
                fluxHg0zatm += -1.0*MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1])*pow(10.0,3.0)*dx*dy; // ng/h
                fluxHg0zdep += Hggas*(Pr/det)*dx*dy; // ng/h
-               fluxHgIIzdep += HgIIatm*(Pr/det)*dx*dy; // ng/h  
-               fluxMMHgzdep += MMHgatm*(Pr/det)*dx*dy; // ng/h 
+               fluxHgIIzdep += (HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0))*dx*dy; // ng/h  
+               fluxMMHgzdep += 0.005025*(HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0))*dx*dy; // ng/h 
                fluxSPMzdep += phiSPMatm*pow(10.0,-3.0)*dx*dy; // Kg/h
            }
            else{
@@ -3443,23 +3581,39 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            for(k=1; k<=K; k++){ // rispetto allo spazio y
        
            if(Rini[i][j][k]==Rbot){  
-               fluHgIIzsedext1 += MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*dx*dy-HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
-               fluMMHgzsedext1 += MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*dx*dy-MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h 
-               fluHgIIzburext1 += HgIIpw[i][j][1]*kDIIsed*SWsed[i][j]*dep[i][j]*dx*dy+HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
-               fluMMHgzburext1 += MMHgpw[i][j][1]*kDMMsed*SWsed[i][j]*dep[i][j]*dx*dy+MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzsedext1 += MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*dx*dy; // microg/h
+               fluMMHgzsedext1 += MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*dx*dy; // microg/h 
+               fluHgIIzburext1 += THgsed[i][j][1]*(1.0-kMM)*(1.0-porsed[i][j][1])*SDsed*dep[i][j]*pow(10.0,6.0)*dx*dy;//+HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluMMHgzburext1 += THgsed[i][j][1]*kMM*(1.0-porsed[i][j][1])*SDsed*dep[i][j]*pow(10.0,6.0)*dx*dy;//+MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzburext12 += NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*HgII[i][j][k]*dx*dy; //microg/h
+               fluMMHgzburext12 += NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*MMHg[i][j][k]*dx*dy; //microg/h
+               fluHgIIzburext13 += THgsed[i][j][1]*(1.0-kMM)*(1.0-porsed[i][j][1])*SDsed*depmed*pow(10.0,6.0)*dx*dy+HgIIpw[i][j][1]*porsed[i][j][1]*depmed*dx*dy; // microg/h
+               fluMMHgzburext13 += THgsed[i][j][1]*kMM*(1.0-porsed[i][j][1])*SDsed*depmed*pow(10.0,6.0)*dx*dy+MMHgpw[i][j][1]*porsed[i][j][1]*depmed*dx*dy; // microg/h
+               fluHgIIzburext14 += kD0*SPM[i][j][k]*HgII[i][j][k]*dep[i][j]*dx*dy; // microg/h
+               fluMMHgzburext14 += kD0*SPM[i][j][k]*MMHg[i][j][k]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzburext15 += kD0*SPM[i][j][k]*HgII[i][j][k]*depmed*dx*dy; // microg/h
+               fluMMHgzburext15 += kD0*SPM[i][j][k]*MMHg[i][j][k]*depmed*dx*dy; // microg/h
            }
            else{
                fluHgIIzsedext1 += 0.0;
                fluMMHgzsedext1 += 0.0;
                fluHgIIzburext1 += 0.0; // microg/h
                fluMMHgzburext1 += 0.0; // microg/h
+               fluHgIIzburext12 += 0.0; //microg/h
+               fluMMHgzburext12 += 0.0; //microg/h
+               fluHgIIzburext13 += 0.0; //microg/h
+               fluMMHgzburext13 += 0.0; //microg/h
+               fluHgIIzburext14 += 0.0; // microg/h
+               fluMMHgzburext14 += 0.0; // microg/h
+               fluHgIIzburext15 += 0.0; // microg/h
+               fluMMHgzburext15 += 0.0; // microg/h
            }
            
            if(Rini[i][j][1]>=Rin && Rini[i][j][k]==Rbot){
                fluxHg0zatmext1 += -1.0*MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1])*pow(10.0,3.0)*dx*dy; // ng/h
                fluxHg0zdepext1 += Hggas*(Pr/det)*dx*dy; // ng/h
-               fluxHgIIzdepext1 += HgIIatm*(Pr/det)*dx*dy; // ng/h  
-               fluxMMHgzdepext1 += MMHgatm*(Pr/det)*dx*dy; // ng/h 
+               fluxHgIIzdepext1 += (HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0))*dx*dy; // ng/h  
+               fluxMMHgzdepext1 += 0.005025*(HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0))*dx*dy; // ng/h 
                fluxSPMzdepext1 += phiSPMatm*pow(10.0,-3.0)*dx*dy; // Kg/h
            }
            else{
@@ -3479,23 +3633,39 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            for(k=1; k<=K; k++){ // rispetto allo spazio y
        
            if(Rini[i][j][k]==Rbot){  
-               fluHgIIzsedext2 += MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*dx*dy-HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
-               fluMMHgzsedext2 += MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*dx*dy-MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h 
-               fluHgIIzburext2 += HgIIpw[i][j][1]*kDIIsed*SWsed[i][j]*dep[i][j]*dx*dy+HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
-               fluMMHgzburext2 += MMHgpw[i][j][1]*kDMMsed*SWsed[i][j]*dep[i][j]*dx*dy+MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzsedext2 += MTCIIsw[i][j]*(HgIIpw[i][j][1]-HgII[i][j][k])*dx*dy; // microg/h
+               fluMMHgzsedext2 += MTCMMsw[i][j]*(MMHgpw[i][j][1]-MMHg[i][j][k])*dx*dy; // microg/h 
+               fluHgIIzburext2 += THgsed[i][j][1]*(1.0-kMM)*(1.0-porsed[i][j][1])*SDsed*dep[i][j]*pow(10.0,6.0)*dx*dy;//+HgIIpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluMMHgzburext2 += THgsed[i][j][1]*kMM*(1.0-porsed[i][j][1])*SDsed*dep[i][j]*pow(10.0,6.0)*dx*dy;//+MMHgpw[i][j][1]*porsed[i][j][1]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzburext22 += NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*HgII[i][j][k]*dx*dy; //microg/h
+               fluMMHgzburext22 += NPP[i][j][k]*peratio[i][j][k]*(kD0/forg[i][j][k])*pow(10,-6.0)*MMHg[i][j][k]*dx*dy; //microg/h
+               fluHgIIzburext23 += THgsed[i][j][1]*(1.0-kMM)*(1.0-porsed[i][j][1])*SDsed*depmed*pow(10.0,6.0)*dx*dy+HgIIpw[i][j][1]*porsed[i][j][1]*depmed*dx*dy; // microg/h
+               fluMMHgzburext23 += THgsed[i][j][1]*kMM*(1.0-porsed[i][j][1])*SDsed*depmed*pow(10.0,6.0)*dx*dy+MMHgpw[i][j][1]*porsed[i][j][1]*depmed*dx*dy; // microg/h
+               fluHgIIzburext24 += kD0*SPM[i][j][k]*HgII[i][j][k]*dep[i][j]*dx*dy; // microg/h
+               fluMMHgzburext24 += kD0*SPM[i][j][k]*MMHg[i][j][k]*dep[i][j]*dx*dy; // microg/h
+               fluHgIIzburext25 += kD0*SPM[i][j][k]*HgII[i][j][k]*depmed*dx*dy; // microg/h
+               fluMMHgzburext25 += kD0*SPM[i][j][k]*MMHg[i][j][k]*depmed*dx*dy; // microg/h
            }
            else{
                fluHgIIzsedext2 += 0.0;
                fluMMHgzsedext2 += 0.0;
                fluHgIIzburext2 += 0.0; // microg/h
                fluMMHgzburext2 += 0.0; // microg/h
+               fluHgIIzburext22 += 0.0; //microg/h
+               fluMMHgzburext22 += 0.0; //microg/h
+               fluHgIIzburext23 += 0.0; //microg/h
+               fluMMHgzburext23 += 0.0; //microg/h
+               fluHgIIzburext24 += 0.0; // microg/h
+               fluMMHgzburext24 += 0.0; // microg/h
+               fluHgIIzburext25 += 0.0; // microg/h
+               fluMMHgzburext25 += 0.0; // microg/h
            } 
            
            if(Rini[i][j][1]>=Rin && Rini[i][j][k]==Rbot){
                fluxHg0zatmext2 += -1.0*MTCwa[i][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[i][j][1])*pow(10.0,3.0)*dx*dy; // ng/h
                fluxHg0zdepext2 += Hggas*(Pr/det)*dx*dy; // ng/h
-               fluxHgIIzdepext2 += HgIIatm*(Pr/det)*dx*dy; // ng/h  
-               fluxMMHgzdepext2 += MMHgatm*(Pr/det)*dx*dy; // ng/h 
+               fluxHgIIzdepext2 += (HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0))*dx*dy; // ng/h  
+               fluxMMHgzdepext2 += 0.005025*(HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0))*dx*dy; // ng/h 
                fluxSPMzdepext2 += phiSPMatm*pow(10.0,-3.0)*dx*dy; // Kg/h
            }
            else{
@@ -3514,23 +3684,39 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
            for(k=1; k<=K; k++){ // rispetto allo spazio y
        
            if(Rini[H][j][k]==Rbot){  
-               fluHgIIzsedext3 += MTCIIsw[H][j]*(HgIIpw[H][j][1]-HgII[H][j][k])*dx*dy-HgIIpw[H][j][1]*porsed[H][j][1]*dep[H][j]*dx*dy; // microg/h
-               fluMMHgzsedext3 += MTCMMsw[H][j]*(MMHgpw[H][j][1]-MMHg[H][j][k])*dx*dy-MMHgpw[H][j][1]*porsed[H][j][1]*dep[H][j]*dx*dy; // microg/h   
-               fluHgIIzburext3 += HgIIpw[H][j][1]*kDIIsed*SWsed[H][j]*dep[H][j]*dx*dy+HgIIpw[H][j][1]*porsed[H][j][1]*dep[H][j]*dx*dy; // microg/h
-               fluMMHgzburext3 += MMHgpw[H][j][1]*kDMMsed*SWsed[H][j]*dep[H][j]*dx*dy+MMHgpw[H][j][1]*porsed[H][j][1]*dep[H][j]*dx*dy; // microg/h
+               fluHgIIzsedext3 += MTCIIsw[H][j]*(HgIIpw[H][j][1]-HgII[H][j][k])*dx*dy; // microg/h
+               fluMMHgzsedext3 += MTCMMsw[H][j]*(MMHgpw[H][j][1]-MMHg[H][j][k])*dx*dy; // microg/h   
+               fluHgIIzburext3 += THgsed[H][j][1]*(1.0-kMM)*(1.0-porsed[H][j][1])*SDsed*dep[H][j]*pow(10.0,6.0)*dx*dy;//+HgIIpw[H][j][1]*porsed[H][j][1]*dep[H][j]*dx*dy; // microg/h
+               fluMMHgzburext3 += THgsed[H][j][1]*kMM*(1.0-porsed[H][j][1])*SDsed*dep[H][j]*pow(10.0,6.0)*dx*dy;//+MMHgpw[H][j][1]*porsed[H][j][1]*dep[H][j]*dx*dy; // microg/h
+               fluHgIIzburext32 += NPP[H][j][k]*peratio[H][j][k]*(kD0/forg[H][j][k])*pow(10,-6.0)*HgII[H][j][k]*dx*dy; //microg/h
+               fluMMHgzburext32 += NPP[H][j][k]*peratio[H][j][k]*(kD0/forg[H][j][k])*pow(10,-6.0)*MMHg[H][j][k]*dx*dy; //microg/h
+               fluHgIIzburext33 += THgsed[H][j][1]*(1.0-kMM)*(1.0-porsed[H][j][1])*SDsed*depmed*pow(10.0,6.0)*dx*dy+HgIIpw[H][j][1]*porsed[H][j][1]*depmed*dx*dy; // microg/h
+               fluMMHgzburext33 += THgsed[H][j][1]*kMM*(1.0-porsed[H][j][1])*SDsed*depmed*pow(10.0,6.0)*dx*dy+MMHgpw[H][j][1]*porsed[H][j][1]*depmed*dx*dy; // microg/h
+               fluHgIIzburext34 += kD0*SPM[H][j][k]*HgII[H][j][k]*dep[H][j]*dx*dy; // microg/h
+               fluMMHgzburext34 += kD0*SPM[H][j][k]*MMHg[H][j][k]*dep[H][j]*dx*dy; // microg/h
+               fluHgIIzburext35 += kD0*SPM[H][j][k]*HgII[H][j][k]*depmed*dx*dy; // microg/h
+               fluMMHgzburext35 += kD0*SPM[H][j][k]*MMHg[H][j][k]*depmed*dx*dy; // microg/h
            }
            else{
                fluHgIIzsedext3 += 0.0;
                fluMMHgzsedext3 += 0.0;
                fluHgIIzburext3 += 0.0; // microg/h
                fluMMHgzburext3 += 0.0; // microg/h
+               fluHgIIzburext32 += 0.0; //microg/h
+               fluMMHgzburext32 += 0.0; //microg/h
+               fluHgIIzburext33 += 0.0; //microg/h
+               fluMMHgzburext33 += 0.0; //microg/h
+               fluHgIIzburext34 += 0.0; // microg/h
+               fluMMHgzburext34 += 0.0; // microg/h
+               fluHgIIzburext35 += 0.0; // microg/h
+               fluMMHgzburext35 += 0.0; // microg/h
            } 
             
            if(Rini[H][j][1]>=Rin && Rini[i][j][k]==Rbot){
                fluxHg0zatmext3 += -1.0*MTCwa[H][j]*(Hggas*pow(10.0,-3.0)-H1*Hg0[H][j][1])*pow(10.0,3.0)*dx*dy; // ng/h
                fluxHg0zdepext3 += Hggas*(Pr/det)*dx*dy; // ng/h
-               fluxHgIIzdepext3 += HgIIatm*(Pr/det)*dx*dy; // ng/h  
-               fluxMMHgzdepext3 += MMHgatm*(Pr/det)*dx*dy; // ng/h 
+               fluxHgIIzdepext3 += (HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0))*dx*dy; // ng/h  
+               fluxMMHgzdepext3 += 0.005025*(HgIIatm*(Pr/det)+DrydepHgII*pow(10.0,3.0))*dx*dy; // ng/h 
                fluxSPMzdepext3 += phiSPMatm*pow(10.0,-3.0)*dx*dy; // Kg/h
            }
            else{
@@ -3558,18 +3744,50 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
    TotfluMMHgzsed += fluMMHgzsed*dt*pow(10,-9.0)*(1.0/PMMMHg);
    TotfluHgIIzbur += fluHgIIzbur*dt*pow(10,-9.0)*(1.0/PMHgII);
    TotfluMMHgzbur += fluMMHgzbur*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzbur2 += fluHgIIzbur2*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzbur2 += fluMMHgzbur2*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzbur3 += fluHgIIzbur3*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzbur3 += fluMMHgzbur3*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzbur4 += fluHgIIzbur4*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzbur4 += fluMMHgzbur4*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzbur5 += fluHgIIzbur5*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzbur5 += fluMMHgzbur5*dt*pow(10,-9.0)*(1.0/PMMMHg);
    TotfluHgIIzsedext1 += fluHgIIzsedext1*dt*pow(10,-9.0)*(1.0/PMHgII);
    TotfluMMHgzsedext1 += fluMMHgzsedext1*dt*pow(10,-9.0)*(1.0/PMMMHg);
    TotfluHgIIzburext1 += fluHgIIzburext1*dt*pow(10,-9.0)*(1.0/PMHgII);
    TotfluMMHgzburext1 += fluMMHgzburext1*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext12 += fluHgIIzburext12*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext12 += fluMMHgzburext12*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext13 += fluHgIIzburext13*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext13 += fluMMHgzburext13*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext14 += fluHgIIzburext14*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext14 += fluMMHgzburext14*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext15 += fluHgIIzburext15*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext15 += fluMMHgzburext15*dt*pow(10,-9.0)*(1.0/PMMMHg);
    TotfluHgIIzsedext2 += fluHgIIzsedext2*dt*pow(10,-9.0)*(1.0/PMHgII);
    TotfluMMHgzsedext2 += fluMMHgzsedext2*dt*pow(10,-9.0)*(1.0/PMMMHg);
    TotfluHgIIzburext2 += fluHgIIzburext2*dt*pow(10,-9.0)*(1.0/PMHgII);
    TotfluMMHgzburext2 += fluMMHgzburext2*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext22 += fluHgIIzburext22*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext22 += fluMMHgzburext22*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext23 += fluHgIIzburext23*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext23 += fluMMHgzburext23*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext24 += fluHgIIzburext24*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext24 += fluMMHgzburext24*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext25 += fluHgIIzburext25*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext25 += fluMMHgzburext25*dt*pow(10,-9.0)*(1.0/PMMMHg);
    TotfluHgIIzsedext3 += fluHgIIzsedext3*dt*pow(10,-9.0)*(1.0/PMHgII);
    TotfluMMHgzsedext3 += fluMMHgzsedext3*dt*pow(10,-9.0)*(1.0/PMMMHg);
    TotfluHgIIzburext3 += fluHgIIzburext3*dt*pow(10,-9.0)*(1.0/PMHgII);
    TotfluMMHgzburext3 += fluMMHgzburext3*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext32 += fluHgIIzburext32*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext32 += fluMMHgzburext32*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext33 += fluHgIIzburext33*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext33 += fluMMHgzburext33*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext34 += fluHgIIzburext34*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext34 += fluMMHgzburext34*dt*pow(10,-9.0)*(1.0/PMMMHg);
+   TotfluHgIIzburext35 += fluHgIIzburext35*dt*pow(10,-9.0)*(1.0/PMHgII);
+   TotfluMMHgzburext35 += fluMMHgzburext35*dt*pow(10,-9.0)*(1.0/PMMMHg);
    
    TotfluHg0zatm += fluxHg0zatm*dt*pow(10,-12.0)*(1.0/PMHg0);
    TotfluHg0zdep += fluxHg0zdep*dt*pow(10,-12.0)*(1.0/PMHg0);
@@ -3602,7 +3820,19 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
    TotHgsed=TotHgIIsed+TotMMHgsed;
    TotHgIIbur=TotfluHgIIzbur-TotfluHgIIzburext1-TotfluHgIIzburext2-TotfluHgIIzburext3;
    TotMMHgbur=TotfluMMHgzbur-TotfluMMHgzburext1-TotfluMMHgzburext2-TotfluMMHgzburext3;
+   TotHgIIbur2=TotfluHgIIzbur2-TotfluHgIIzburext12-TotfluHgIIzburext22-TotfluHgIIzburext32;
+   TotMMHgbur2=TotfluMMHgzbur2-TotfluMMHgzburext12-TotfluMMHgzburext22-TotfluMMHgzburext32;
+   TotHgIIbur3=TotfluHgIIzbur3-TotfluHgIIzburext13-TotfluHgIIzburext23-TotfluHgIIzburext33;
+   TotMMHgbur3=TotfluMMHgzbur3-TotfluMMHgzburext13-TotfluMMHgzburext23-TotfluMMHgzburext33;
+   TotHgIIbur4=TotfluHgIIzbur4-TotfluHgIIzburext14-TotfluHgIIzburext24-TotfluHgIIzburext34;
+   TotMMHgbur4=TotfluMMHgzbur4-TotfluMMHgzburext14-TotfluMMHgzburext24-TotfluMMHgzburext34;
+   TotHgIIbur5=TotfluHgIIzbur5-TotfluHgIIzburext15-TotfluHgIIzburext25-TotfluHgIIzburext35;
+   TotMMHgbur5=TotfluMMHgzbur5-TotfluMMHgzburext15-TotfluMMHgzburext25-TotfluMMHgzburext35;
    TotHgbur=TotHgIIbur+TotMMHgbur;
+   TotHgbur2=TotHgIIbur2+TotMMHgbur2;
+   TotHgbur3=TotHgIIbur3+TotMMHgbur3;
+   TotHgbur4=TotHgIIbur4+TotMMHgbur4;
+   TotHgbur5=TotHgIIbur5+TotMMHgbur5;
    TotfluHg0atm=TotfluHg0zatm-TotfluHg0zatmext1-TotfluHg0zatmext2-TotfluHg0zatmext3;
    TotfluHg0dep=TotfluHg0zdep-TotfluHg0zdepext1-TotfluHg0zdepext2-TotfluHg0zdepext3;
    TotfluHgIIdep=TotfluHgIIzdep-TotfluHgIIzdepext1-TotfluHgIIzdepext2-TotfluHgIIzdepext3;
@@ -3621,9 +3851,9 @@ for(n=1; n<=N; n++){ // rispetto all'anno n
    fprintf(fu,"  TotfluHg0atm  TotfluHg0dep   TotfluHgIIdep  TotfluMMHgdep   TotfluHgdep   TotfluSPMdep\n");
    fprintf(fu, "%f\t%f\t%f\t%f\t%f\t%f\n", TotfluHg0atm, TotfluHg0dep, TotfluHgIIdep,TotfluMMHgdep,TotfluHgdep,TotfluSPMdep);
    fprintf(fRelease, "%i\t%f\t%f\t%f\n", n+2004, TotHgIIsed, TotMMHgsed, TotHgsed);
-   fprintf(fOutflow, "%i\t%f\t%f\t%f\n", n+2004, Totlev, Totsci, Totlev+Totsci);
-   fprintf(fEvasion, "%i\t%f\t%f\t%f\n", n+2004, TotfluHg0atm, TotfluHgdep, TotfluHg0atm-TotfluHgdep);
-   fprintf(fRecycled, "%i\t%f\t%f\t%f\n", n+2004, TotHgsed-Totlev-Totsci-TotfluHg0atm+TotfluHgdep, TotHgbur, TotSIISPM+TotSMMSPM);
+   fprintf(fOutflow, "%i\t%f\t%f\t%f\t%f\t%f\t%f\n", n+2004, Totlev, Totsci, Totlev+Totsci, TotfluMMHgxlev,  TotfluMMHgxysci, TotfluMMHgxlev+TotfluMMHgxysci);
+   fprintf(fEvasion, "%i\t%f\t%f\t%f\t%f\n", n+2004, TotfluHg0atm, TotfluHgdep, TotfluMMHgdep, TotfluHg0atm-TotfluHgdep);
+   fprintf(fRecycled, "%i\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", n+2004, TotHgsed-Totlev-Totsci-TotfluHg0atm+TotfluHgdep, TotHgbur, TotSIISPM+TotSMMSPM, TotMMHgbur, TotSMMSPM, TotHgbur2, TotMMHgbur2, TotHgbur3, TotMMHgbur3, TotHgbur4, TotMMHgbur4, TotHgbur5, TotMMHgbur5);
    
    if(n>T-1 && n<T1){
      for(i=1; i<=I; i++){
